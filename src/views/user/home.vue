@@ -1,82 +1,94 @@
 <template>
-  <div class="container">
-    <div class="search">
-      <el-input placeholder="Seach..." v-model="input"></el-input>
+  <div>
+    <div class="top">
+      <div class="container">
+        <span>Home</span>
+        <h1>User</h1>
+      </div>
     </div>
-    <div class="button-mode">
-      <el-button>Active</el-button>
-      <el-button><i class="fas fa-exclamation-triangle"></i> Blocked</el-button>
-      <el-button><i class="fas fa-trash-alt"></i> Deleted</el-button>
-    </div>
-    <div class="changeSizePage-addUser">
-      <el-select v-model="value" placeholder="Select">
-        <el-option
-          v-for="item in options"
-          :key="item.value"
-          :label="item.label"
-          :value="item.value"
+    <div class="container">
+      <div class="search">
+        <el-input placeholder="Seach..." v-model="input"></el-input>
+      </div>
+      <div class="button-mode">
+        <el-button>Active</el-button>
+        <el-button
+          ><i class="fas fa-exclamation-triangle"></i> Blocked</el-button
         >
-        </el-option>
-      </el-select>
-      <el-button type="success" @click="dialogVisible = true"
-        >Add User</el-button
-      >
-      <el-dialog
-        title="New User"
-        :visible.sync="dialogVisible"
-        width="60%"
-        center
-      >
-        <div class="input">
-          <div class="label">First Name</div>
-          <el-input placeholder="Please input"></el-input>
-        </div>
-        <div class="input">
-          <div class="label">Last Name</div>
-          <el-input placeholder="Please input"></el-input>
-        </div>
-        <div class="input">
-          <div class="label">Username</div>
-          <el-input placeholder="Please input"></el-input>
-        </div>
-        <div class="input">
-          <div class="label">Email Adress</div>
-          <el-input placeholder="Please input"></el-input>
-        </div>
-        <span slot="footer" class="dialog-footer">
-          <el-button type="success" @click="dialogVisible = false"
-            >Save</el-button
+        <el-button><i class="fas fa-trash-alt"></i> Deleted</el-button>
+      </div>
+      <div class="changeSizePage-addUser">
+        <el-select v-model="value" placeholder="Select">
+          <el-option
+            v-for="item in options"
+            :key="item.value"
+            :label="item.label"
+            :value="item.value"
           >
-          <el-button type="success" @click="dialogVisible = false"
-            >Save & Configure</el-button
-          >
-          <el-button type="primary" @click="dialogVisible = false"
-            >Save & Add Another</el-button
-          >
-          <el-button @click="dialogVisible = false">Cancel</el-button>
-        </span>
-      </el-dialog>
-    </div>
+          </el-option>
+        </el-select>
+        <el-button type="success" @click="dialogVisible = true"
+          >Add User</el-button
+        >
+        <el-dialog
+          title="New User"
+          :visible.sync="dialogVisible"
+          width="60%"
+          center
+        >
+          <div class="input">
+            <div class="label">First Name</div>
+            <el-input placeholder="Please input"></el-input>
+          </div>
+          <div class="input">
+            <div class="label">Last Name</div>
+            <el-input placeholder="Please input"></el-input>
+          </div>
+          <div class="input">
+            <div class="label">Username</div>
+            <el-input placeholder="Please input"></el-input>
+          </div>
+          <div class="input">
+            <div class="label">Email Adress</div>
+            <el-input placeholder="Please input"></el-input>
+          </div>
+          <span slot="footer" class="dialog-footer">
+            <el-button type="success" @click="dialogVisible = false"
+              >Save</el-button
+            >
+            <el-button type="success" @click="dialogVisible = false"
+              >Save & Configure</el-button
+            >
+            <el-button type="primary" @click="dialogVisible = false"
+              >Save & Add Another</el-button
+            >
+            <el-button @click="dialogVisible = false">Cancel</el-button>
+          </span>
+        </el-dialog>
+      </div>
 
-    <div class="tableUser" style="margin-top: 20px">
-      <el-table :data="tableData" style="width: 100%" stripe>
-        <el-table-column prop="date" label="Username"> </el-table-column>
-        <el-table-column prop="name" label="Full Name"> </el-table-column>
-        <el-table-column prop="address" label="Email Address">
-        </el-table-column>
-        <el-table-column>
-          <el-button circle><i class="fas fa-pencil-alt"></i></el-button
-        ></el-table-column>
-      </el-table>
-    </div>
+      <div class="tableUser" style="margin-top: 20px">
+        <el-table :data="tableData" style="width: 100%" stripe>
+          <el-table-column prop="date" label="Username"> </el-table-column>
+          <el-table-column prop="name" label="Full Name"> </el-table-column>
+          <el-table-column prop="address" label="Email Address">
+          </el-table-column>
+          <el-table-column>
+            <router-link to="/Users/details">
+              <el-button circle><i class="fas fa-pencil-alt"></i></el-button
+            ></router-link>
+          </el-table-column>
+        </el-table>
+      </div>
 
-    <div class="changeCurrentPage">
-      <p>Page 1 of 1 ~ 1 results(s) found</p>
-      <div class="modeChange">
-        <el-button><i class="fas fa-angle-double-left"></i></el-button>
-        <el-button><i class="fas fa-chevron-right"></i></el-button>
-        <el-button><i class="fas fa-chevron-right"></i></el-button>
-        <el-button><i class="fas fa-angle-double-right"></i></el-button>
+      <div class="changeCurrentPage">
+        <p>Page 1 of 1 ~ 1 results(s) found</p>
+        <div class="modeChange">
+          <el-button><i class="fas fa-angle-double-left"></i></el-button>
+          <el-button><i class="fas fa-chevron-right"></i></el-button>
+          <el-button><i class="fas fa-chevron-right"></i></el-button>
+          <el-button><i class="fas fa-angle-double-right"></i></el-button>
+        </div>
       </div>
     </div>
   </div>
@@ -139,6 +151,10 @@ export default {
 </script>
 
 <style lang='scss' scoped>
+.top {
+  padding: 10px 0;
+  background: #ecf0f1;
+}
 .search {
   margin: 20px 0 0 0;
 }
