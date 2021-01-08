@@ -1,14 +1,14 @@
 <template>
   <div class="container">
     <div class="search">
-      <el-input placeholder="Seach..."></el-input>
+      <el-input placeholder="Seach..." v-model="input"></el-input>
     </div>
     <div class="button-mode">
       <el-button>Active</el-button>
       <el-button><i class="fas fa-exclamation-triangle"></i> Blocked</el-button>
       <el-button><i class="fas fa-trash-alt"></i> Deleted</el-button>
     </div>
-    <div class="changePage-addUser">
+    <div class="changeSizePage-addUser">
       <el-select v-model="value" placeholder="Select">
         <el-option
           v-for="item in options"
@@ -57,6 +57,28 @@
         </span>
       </el-dialog>
     </div>
+
+    <div class="tableUser" style="margin-top: 20px">
+      <el-table :data="tableData" style="width: 100%" stripe>
+        <el-table-column prop="date" label="Username"> </el-table-column>
+        <el-table-column prop="name" label="Full Name"> </el-table-column>
+        <el-table-column prop="address" label="Email Address">
+        </el-table-column>
+        <el-table-column>
+          <el-button circle><i class="fas fa-pencil-alt"></i></el-button
+        ></el-table-column>
+      </el-table>
+    </div>
+
+    <div class="changeCurrentPage">
+      <p>Page 1 of 1 ~ 1 results(s) found</p>
+      <div class="modeChange">
+        <el-button><i class="fas fa-angle-double-left"></i></el-button>
+        <el-button><i class="fas fa-chevron-right"></i></el-button>
+        <el-button><i class="fas fa-chevron-right"></i></el-button>
+        <el-button><i class="fas fa-angle-double-right"></i></el-button>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -88,6 +110,29 @@ export default {
       ],
       value: "",
       dialogVisible: false,
+      input: "",
+      tableData: [
+        {
+          date: "2016-05-03",
+          name: "Tom",
+          address: "No. 189, Grove St, Los Angeles",
+        },
+        {
+          date: "2016-05-02",
+          name: "Tom",
+          address: "No. 189, Grove St, Los Angeles",
+        },
+        {
+          date: "2016-05-04",
+          name: "Tom",
+          address: "No. 189, Grove St, Los Angeles",
+        },
+        {
+          date: "2016-05-01",
+          name: "Tom",
+          address: "No. 189, Grove St, Los Angeles",
+        },
+      ],
     };
   },
 };
@@ -105,10 +150,8 @@ export default {
     width: 33%;
   }
 }
-.el-dialog__header {
-    background: #483D8B;
-}
-.changePage-addUser {
+
+.changeSizePage-addUser {
   display: flex;
   justify-content: space-between;
   .input {
@@ -122,6 +165,31 @@ export default {
     .label {
       width: 15%;
       font-weight: bolder;
+    }
+  }
+}
+
+.tableUser {
+  button {
+    display: block;
+    margin-left: auto;
+  }
+}
+
+.changeCurrentPage {
+  margin-top: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  p {
+    font-size: 12px;
+    color: rgb(155, 151, 151);
+  }
+  .modeChange {
+    button {
+      margin: 0;
+      padding: 8px 12px;
+      border-radius: 0;
     }
   }
 }
