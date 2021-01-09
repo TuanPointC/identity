@@ -3,6 +3,10 @@ import VueRouter, { RouteConfig } from 'vue-router'
 import UserHome from '../views/user/home.vue'
 import RolesrHome from '../views/roles/home.vue'
 import DetailsUser from '../views/user/details.vue'
+import TitleUser from '../views/user/title.vue'
+import RolesUser from '../views/user/roles.vue'
+import MenuUser from '../views/user/menu.vue'
+import { component } from 'vue/types/umd'
 
 Vue.use(VueRouter)
 
@@ -13,15 +17,27 @@ const routes: Array<RouteConfig> = [
   },
   {
     path: '/Users',
-    component:UserHome,
+    component: TitleUser,
+    children: [
+      {
+        path: '/',
+        component: UserHome
+      },
+      {
+        path: 'details',
+        component: DetailsUser
+      },
+      {
+        path: 'roles',
+        component:RolesUser
+      },
+    ]
   },
-  {
-    path:'/Users/details',
-    component:DetailsUser,
-  },
+
+
   {
     path: '/Roles',
-    component:RolesrHome,
+    component: RolesrHome,
   },
 
 ]

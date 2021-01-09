@@ -8,21 +8,21 @@
         @select="handleSelect"
         background-color="#483D8B"
         text-color="#aeaeae"
-        active-text-color="#fff"
+        router=true
       >
-        <el-menu-item index="1"
+        <el-menu-item index="/Users"
           ><router-link to="/Users">User</router-link></el-menu-item
         >
-        <el-menu-item index="2"
+        <el-menu-item index="/Roles"
           ><router-link to="/Roles">Roles </router-link></el-menu-item
         >
-        <el-menu-item index="3">
+        <el-menu-item index="/ClaimTypes">
           <router-link to="/ClaimTypes">Claim Types </router-link></el-menu-item
         >
-        <el-menu-item index="4"
+        <el-menu-item index="/Clients"
           ><router-link to="/Clients">Clients </router-link></el-menu-item
         >
-        <el-submenu index="5">
+        <el-submenu index="/Resources">
           <template slot="title"
             ><router-link to="/Resources">Resources </router-link></template
           >
@@ -30,10 +30,10 @@
           <el-menu-item index="5-2">item two</el-menu-item>
           <el-menu-item index="5-3">item three</el-menu-item>
         </el-submenu>
-        <el-menu-item index="6"
+        <el-menu-item index="/Auditing"
           ><router-link to="/Auditing">Auditing </router-link></el-menu-item
         >
-        <el-menu-item index="7"
+        <el-menu-item index="/Settings"
           ><router-link to="/Settings">Settings </router-link></el-menu-item
         >
       </el-menu>
@@ -60,22 +60,26 @@ export default {
 <style lang="scss" scoped>
 a {
   text-decoration: none;
-  color: #aeaeae;
+  color: #aeaeae!important;
   display: inline-block;
   height: 60px;
   padding: 0 20px;
   font-size: 17px;
 }
-a.router-link-exact-active{
+a.router-link-exact-active,a.router-link-active{
     color: white!important;
+    border-bottom: 3px solid orangered;
+}
+a[data-v-a380d422] {
+    height: 58px;
 }
 li {
   font-weight: 600;
   padding: 0;
 }
 li.is-active {
-  border-bottom-color: rgb(255, 96, 75)!important;
-  border-bottom-width:3px!important;
+  border-bottom-color:none!important;
+  border-bottom-width:0!important;
 }
 .menu-box {
   background: #483d8b;

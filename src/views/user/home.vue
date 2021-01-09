@@ -1,11 +1,6 @@
 <template>
   <div>
-    <div class="top">
-      <div class="container">
-        <span>Home</span>
-        <h1>User</h1>
-      </div>
-    </div>
+   
     <div class="container">
       <div class="search">
         <el-input placeholder="Seach..." v-model="input"></el-input>
@@ -18,7 +13,7 @@
         <el-button><i class="fas fa-trash-alt"></i> Deleted</el-button>
       </div>
       <div class="changeSizePage-addUser">
-        <el-select v-model="value" placeholder="Select">
+        <el-select v-model="value" :placeholder="value" >
           <el-option
             v-for="item in options"
             :key="item.value"
@@ -100,24 +95,24 @@ export default {
     return {
       options: [
         {
-          value: "Option1",
-          label: "Option1",
+          value: "5",
+          label: "5 per page",
         },
         {
-          value: "Option2",
-          label: "Option2",
+          value: "10",
+          label: "10 per page",
         },
         {
-          value: "Option3",
-          label: "Option3",
+          value: "15",
+          label: "15 per page",
         },
         {
-          value: "Option4",
-          label: "Option4",
+          value: "20",
+          label: "20 per page",
         },
         {
-          value: "Option5",
-          label: "Option5",
+          value: "25",
+          label: "25 per page",
         },
       ],
       value: "",
@@ -151,10 +146,7 @@ export default {
 </script>
 
 <style lang='scss' scoped>
-.top {
-  padding: 10px 0;
-  background: #ecf0f1;
-}
+
 .search {
   margin: 20px 0 0 0;
 }

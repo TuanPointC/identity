@@ -1,11 +1,6 @@
 <template>
   <div>
-    <div class="top">
-      <div class="container">
-        <span>Home / Users</span>
-        <h1>Bootstrap User</h1>
-      </div>
-    </div>
+    <MenuUser/>
     <div class="container">
       <div class="active" style="display: flex">
         <span style="margin-right: 60px">Active</span>
@@ -73,7 +68,12 @@
 </template>
 
 <script>
+import MenuUser from '@/views/user/menu.vue'
+
 export default {
+  components:{
+    MenuUser
+  },
   data() {
     return {
       centerDialogVisible: false,
