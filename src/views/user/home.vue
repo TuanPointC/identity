@@ -1,19 +1,24 @@
 <template>
-  <div>
-   
+  <div style="margin-bottom: 20px">
     <div class="container">
       <div class="search">
-        <el-input placeholder="Seach..." v-model="input"></el-input>
+        <el-input placeholder="Seach..." v-model="input" @keyup.native="search"></el-input>
       </div>
       <div class="button-mode">
-        <el-button>Active</el-button>
-        <el-button
+        <el-button @click="changeState('active')">Active</el-button>
+        <el-button @click="changeState('blocked')"
           ><i class="fas fa-exclamation-triangle"></i> Blocked</el-button
         >
-        <el-button><i class="fas fa-trash-alt"></i> Deleted</el-button>
+        <el-button @click="changeState('deleted')"
+          ><i class="fas fa-trash-alt"></i> Deleted</el-button
+        >
       </div>
       <div class="changeSizePage-addUser">
-        <el-select v-model="value" :placeholder="value" >
+        <el-select
+          v-model="value"
+          placeholder="5 per page"
+          @change="changePageSize(value)"
+        >
           <el-option
             v-for="item in options"
             :key="item.value"
@@ -63,10 +68,14 @@
       </div>
 
       <div class="tableUser" style="margin-top: 20px">
-        <el-table :data="tableData" style="width: 100%" stripe>
-          <el-table-column prop="date" label="Username"> </el-table-column>
-          <el-table-column prop="name" label="Full Name"> </el-table-column>
-          <el-table-column prop="address" label="Email Address">
+        <el-table :data="GetUser.results" style="width: 100%" stripe>
+          <el-table-column prop="username" label="Username"> </el-table-column>
+          <el-table-column>
+            <template slot-scope="scope">
+              {{ scope.row.firstName + " " + scope.row.lastName }}
+            </template>
+          </el-table-column>
+          <el-table-column prop="email" label="Email Address">
           </el-table-column>
           <el-table-column>
             <router-link to="/Users/details">
@@ -77,12 +86,23 @@
       </div>
 
       <div class="changeCurrentPage">
-        <p>Page 1 of 1 ~ 1 results(s) found</p>
+        <p>
+          Page {{ GetUser.currentPage }} of {{ GetUser.pageCount }} ~
+          {{ GetUser.totalCount }} results(s) found
+        </p>
         <div class="modeChange">
-          <el-button><i class="fas fa-angle-double-left"></i></el-button>
-          <el-button><i class="fas fa-chevron-right"></i></el-button>
-          <el-button><i class="fas fa-chevron-right"></i></el-button>
-          <el-button><i class="fas fa-angle-double-right"></i></el-button>
+          <el-button @click="changeCurrentPage(-10000)"
+            ><i class="fas fa-angle-double-left"></i
+          ></el-button>
+          <el-button @click="changeCurrentPage(-1)"
+            ><i class="fas fa-chevron-left"></i
+          ></el-button>
+          <el-button @click="changeCurrentPage(1)"
+            ><i class="fas fa-chevron-right"></i
+          ></el-button>
+          <el-button @click="changeCurrentPage(10000)"
+            ><i class="fas fa-angle-double-right"></i
+          ></el-button>
         </div>
       </div>
     </div>
@@ -90,6 +110,8 @@
 </template>
 
 <script>
+import { UserModule } from "@/store/modules/user";
+
 export default {
   data() {
     return {
@@ -118,35 +140,58 @@ export default {
       value: "",
       dialogVisible: false,
       input: "",
-      tableData: [
-        {
-          date: "2016-05-03",
-          name: "Tom",
-          address: "No. 189, Grove St, Los Angeles",
-        },
-        {
-          date: "2016-05-02",
-          name: "Tom",
-          address: "No. 189, Grove St, Los Angeles",
-        },
-        {
-          date: "2016-05-04",
-          name: "Tom",
-          address: "No. 189, Grove St, Los Angeles",
-        },
-        {
-          date: "2016-05-01",
-          name: "Tom",
-          address: "No. 189, Grove St, Los Angeles",
-        },
-      ],
     };
+  },
+  computed: {
+    GetUser() {
+      return UserModule.GetUser;
+    },
+    RequestGetUser() {
+      return UserModule.RequestGetUser;
+    },
+  },
+
+  methods: {
+    changePageSize(e) {
+      this.RequestGetUser.pageSize = e;
+      this.RequestGetUser.page=1;
+      UserModule.getuserapi();
+    },
+    changeCurrentPage(e) {
+      if (e > 0) {
+        if (e + this.GetUser.currentPage < this.GetUser.pageCount) {
+          this.RequestGetUser.page++;
+        } else {
+          this.RequestGetUser.page = this.GetUser.pageCount;
+        }
+      } else {
+        if (e + this.GetUser.currentPage > 1) {
+          this.RequestGetUser.page--;
+        } else {
+          this.RequestGetUser.page = 1;
+        }
+      }
+      UserModule.getuserapi();
+    },
+
+    changeState(e) {
+      this.RequestGetUser.state = e;
+      UserModule.getuserapi();
+    },
+
+    search(){
+      this.RequestGetUser.q=this.input;
+      setTimeout(UserModule.getuserapi(),5000);
+    }
+  },
+
+  async mounted() {
+    await UserModule.getuserapi();
   },
 };
 </script>
 
 <style lang='scss' scoped>
-
 .search {
   margin: 20px 0 0 0;
 }
@@ -185,10 +230,10 @@ export default {
 }
 
 .changeCurrentPage {
-  margin-top: 20px;
   display: flex;
   align-items: center;
   justify-content: space-between;
+  height: 75px;
   p {
     font-size: 12px;
     color: rgb(155, 151, 151);

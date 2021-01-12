@@ -8,7 +8,7 @@
         @select="handleSelect"
         background-color="#483D8B"
         text-color="#aeaeae"
-        router=true
+        :router="true"
       >
         <el-menu-item index="/Users"
           ><router-link to="/Users">User</router-link></el-menu-item

@@ -1,7 +1,10 @@
 <template>
-  <div class="app">
+  <div class="app" style="position:relative">
     <Menu />
     <router-view />
+    <div class="footer" style="text-align:center;background:#ecf0f1;padding:10px 0;top:100%;position:absolute;width:100%">
+      Phenikaa - 2021
+    </div>
   </div>
 </template>
 

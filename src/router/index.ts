@@ -5,8 +5,8 @@ import RolesrHome from '../views/roles/home.vue'
 import DetailsUser from '../views/user/details.vue'
 import TitleUser from '../views/user/title.vue'
 import RolesUser from '../views/user/roles.vue'
-import MenuUser from '../views/user/menu.vue'
-import { component } from 'vue/types/umd'
+
+//import { component } from 'vue/types/umd'
 
 Vue.use(VueRouter)
 
@@ -30,6 +30,14 @@ const routes: Array<RouteConfig> = [
       {
         path: 'roles',
         component:RolesUser
+      },
+      {
+        path: 'additionalDetails',
+      
+      },
+      {
+        path: 'application',
+        
       },
     ]
   },

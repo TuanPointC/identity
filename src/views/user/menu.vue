@@ -21,7 +21,7 @@
             </router-link></el-menu-item
           >
           <el-menu-item index="3">
-            <router-link to="/Users/claimTypes"
+            <router-link to="/Users/additionalDetails"
               >Additional Details
             </router-link></el-menu-item
           >
