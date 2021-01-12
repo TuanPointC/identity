@@ -1,41 +1,70 @@
 <template>
   <div>
-    <MenuUser/>
+    <MenuUser />
     <div class="container">
       <div class="active" style="display: flex">
         <span style="margin-right: 60px">Active</span>
         <div class="switch-box">
           <label class="switch switch-green">
-            <input type="checkbox" class="switch-input" checked />
+            <input
+              type="checkbox"
+              class="switch-input"
+              :checked="active"
+              @change="changedFunc(), changeActive()"
+            />
             <span class="switch-label" data-on="On" data-off="Off"></span>
             <span class="switch-handle"></span>
           </label>
         </div>
       </div>
+      <div class="input">
+        <span> ID</span>
+        <el-input
+          :disabled="true"
+          v-model="editData[position].subject"
+        ></el-input>
+      </div>
       <hr />
       <div class="input">
         <span>First Name</span>
-        <el-input></el-input>
+        <el-input
+          v-model="editData[position].firstName"
+          @keyup.native="changedFunc"
+        ></el-input>
       </div>
       <hr />
       <div class="input">
         <span>Last Name</span>
-        <el-input></el-input>
+        <el-input
+          v-model="editData[position].lastName"
+          @keyup.native="changedFunc"
+        ></el-input>
       </div>
       <hr />
       <div class="input">
         <span>Username</span>
-        <el-input></el-input>
+        <el-input
+          v-model="editData[position].username"
+          @keyup.native="changedFunc"
+        ></el-input>
       </div>
       <hr />
       <div class="input">
         <span>Email Address</span>
-        <el-input></el-input>
+        <el-input
+          v-model="editData[position].email"
+          @keyup.native="changedFunc"
+        ></el-input>
       </div>
       <hr />
       <div class="buttonFunction">
         <div class="group1">
-          <el-button type="success" @click="open2()">Save</el-button>
+          <el-button
+            type="success"
+            @click="open2(), save()"
+            :disabled="!changed"
+            >Save</el-button
+          >
           <el-button type="info">Reset Password</el-button>
         </div>
         <div class="group2">
@@ -56,7 +85,7 @@
               <el-button @click="centerDialogVisible = false">Cancel</el-button>
               <el-button
                 type="danger"
-                @click="centerDialogVisible = false,open2()"
+                @click="(centerDialogVisible = false), open2(), deletes()"
                 >Delete</el-button
               >
             </span>
@@ -68,16 +97,27 @@
 </template>
 
 <script>
-import MenuUser from '@/views/user/menu.vue'
-
+import MenuUser from "@/views/user/menu.vue";
+import { UserModule } from "@/store/modules/user";
+import { editUserApi, deleteUserApi } from "@/api/user";
 export default {
-  components:{
-    MenuUser
+  components: {
+    MenuUser,
   },
   data() {
     return {
       centerDialogVisible: false,
+      changed: false,
+      active: true,
     };
+  },
+  computed: {
+    editData() {
+      return UserModule.GetUser.results;
+    },
+    position() {
+      return UserModule.EditPosition;
+    },
   },
   methods: {
     open2() {
@@ -86,6 +126,28 @@ export default {
         type: "success",
       });
     },
+    changedFunc() {
+      this.changed = true;
+    },
+    save() {
+      editUserApi();
+    },
+    deletes() {
+      deleteUserApi();
+    },
+    changeActive() {
+      UserModule.changeActive(this.active);
+    },
+  },
+  mounted() {
+    if (
+      !this.editData[this.position].isDeleted &&
+      !this.editData[this.position].isBlocked
+    ) {
+      this.active = true;
+    } else {
+      this.active = false;
+    }
   },
 };
 </script>

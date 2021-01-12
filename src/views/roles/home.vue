@@ -47,9 +47,9 @@
       </div>
 
       <div class="tableUser" style="margin-top: 20px">
-        <el-table :data="tableData" style="width: 100%" stripe>
-          <el-table-column prop="date" label="Username"> </el-table-column>
-          <el-table-column prop="name" label="Description"> </el-table-column>
+        <el-table :data="rolesData" style="width: 100%" stripe>
+          <el-table-column prop="name" label="Username"> </el-table-column>
+          <el-table-column prop="description" label="Description"> </el-table-column>
           <el-table-column width="100">
             <el-button circle><i class="fas fa-pencil-alt"></i></el-button>
           </el-table-column>
@@ -60,32 +60,23 @@
 </template>
 
 <script>
+import {RolesModule} from '@/store/modules/roles'
 export default {
   data() {
     return {
       value: "",
       dialogVisible: false,
       input: "",
-      tableData: [
-        {
-          date: "2016-05-03",
-          name: "Tom",
-        },
-        {
-          date: "2016-05-02",
-          name: "Tom",
-        },
-        {
-          date: "2016-05-04",
-          name: "Tom",
-        },
-        {
-          date: "2016-05-01",
-          name: "Tom",
-        },
-      ],
     };
   },
+  computed:{
+    rolesData(){
+      return RolesModule.GetRoles;
+    }
+  },
+  mounted(){
+    RolesModule.getRolesApi();
+  }
 };
 </script>
 

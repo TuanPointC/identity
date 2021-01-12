@@ -2,7 +2,11 @@
   <div style="margin-bottom: 20px">
     <div class="container">
       <div class="search">
-        <el-input placeholder="Seach..." v-model="input" @keyup.native="search"></el-input>
+        <el-input
+          placeholder="Seach..."
+          v-model="input"
+          @keyup.native="search"
+        ></el-input>
       </div>
       <div class="button-mode">
         <el-button @click="changeState('active')">Active</el-button>
@@ -38,31 +42,74 @@
         >
           <div class="input">
             <div class="label">First Name</div>
-            <el-input placeholder="Please input"></el-input>
+            <el-input
+              placeholder="Please input"
+              v-model="addUserData.firstName"
+              @keyup.native="checkFillFullInput"
+            ></el-input>
           </div>
           <div class="input">
             <div class="label">Last Name</div>
-            <el-input placeholder="Please input"></el-input>
+            <el-input
+              placeholder="Please input"
+              v-model="addUserData.lastName"
+              @keyup.native="checkFillFullInput"
+            ></el-input>
           </div>
           <div class="input">
             <div class="label">Username</div>
-            <el-input placeholder="Please input"></el-input>
+            <el-input
+              placeholder="Please input"
+              v-model="addUserData.username"
+              @keyup.native="checkFillFullInput"
+            ></el-input>
           </div>
           <div class="input">
             <div class="label">Email Adress</div>
-            <el-input placeholder="Please input"></el-input>
+            <el-input
+              placeholder="Please input"
+              v-model="addUserData.email"
+              @keyup.native="checkFillFullInput"
+            ></el-input>
           </div>
+          <div class="input">
+            <div class="label">Password</div>
+            <el-input
+              type="password"
+              placeholder="Please input"
+              v-model="addUserData.password"
+              @keyup.native="checkPassword(), checkFillFullInput()"
+            ></el-input>
+          </div>
+          <span
+            v-show="!addUser.passwordIsCorrect"
+            style="color: red; width: 85%; display: block; margin-left: auto"
+          >
+            Password must have from 6 to 20 characters which contain at least
+            one numeric digit, one uppercase and one lowercase letter</span
+          >
           <span slot="footer" class="dialog-footer">
-            <el-button type="success" @click="dialogVisible = false"
+            <el-button
+              type="success"
+              @click="(dialogVisible = false), addUserRequest()"
+              :disabled="!addUser.filFullInput"
               >Save</el-button
             >
-            <el-button type="success" @click="dialogVisible = false"
+            <el-button
+              type="success"
+              @click="dialogVisible = false"
+              :disabled="!addUser.filFullInput"
               >Save & Configure</el-button
             >
-            <el-button type="primary" @click="dialogVisible = false"
+            <el-button
+              type="primary"
+              @click="dialogVisible = false"
+              :disabled="!addUser.filFullInput"
               >Save & Add Another</el-button
             >
-            <el-button @click="dialogVisible = false">Cancel</el-button>
+            <el-button @click="(dialogVisible = false), resetAddUserData()"
+              >Cancel</el-button
+            >
           </span>
         </el-dialog>
       </div>
@@ -78,9 +125,12 @@
           <el-table-column prop="email" label="Email Address">
           </el-table-column>
           <el-table-column>
-            <router-link to="/Users/details">
-              <el-button circle><i class="fas fa-pencil-alt"></i></el-button
-            ></router-link>
+            <template slot-scope="scope">
+              <router-link to="/Users/details">
+                <el-button circle @click="editData(scope)"
+                  ><i class="fas fa-pencil-alt"></i></el-button
+              ></router-link>
+            </template>
           </el-table-column>
         </el-table>
       </div>
@@ -111,7 +161,7 @@
 
 <script>
 import { UserModule } from "@/store/modules/user";
-
+import { addUserApi } from "@/api/user";
 export default {
   data() {
     return {
@@ -140,6 +190,10 @@ export default {
       value: "",
       dialogVisible: false,
       input: "",
+      addUser: {
+        passwordIsCorrect: true,
+        filFullInput: false,
+      },
     };
   },
   computed: {
@@ -149,12 +203,18 @@ export default {
     RequestGetUser() {
       return UserModule.RequestGetUser;
     },
+    addUserData() {
+      return UserModule.AddUser;
+    },
+    GetPositionEditUser(){
+      return UserModule.EditPosition;
+    }
   },
 
   methods: {
     changePageSize(e) {
       this.RequestGetUser.pageSize = e;
-      this.RequestGetUser.page=1;
+      this.RequestGetUser.page = 1;
       UserModule.getuserapi();
     },
     changeCurrentPage(e) {
@@ -173,16 +233,49 @@ export default {
       }
       UserModule.getuserapi();
     },
-
     changeState(e) {
       this.RequestGetUser.state = e;
+      this.RequestGetUser.page = 1;
       UserModule.getuserapi();
     },
-
-    search(){
-      this.RequestGetUser.q=this.input;
-      setTimeout(UserModule.getuserapi(),5000);
-    }
+    search() {
+      this.RequestGetUser.q = this.input;
+      setTimeout(UserModule.getuserapi(), 5000);
+    },
+    checkPassword() {
+      const passw = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{6,20}$/;
+      if (this.addUserData.password.match(passw)) {
+        this.addUser.passwordIsCorrect = true;
+      } else {
+        this.addUser.passwordIsCorrect = false;
+      }
+    },
+    checkFillFullInput() {
+      if (
+        this.addUserData.firstName != "" &&
+        this.addUserData.lastName != "" &&
+        this.addUserData.email != "" &&
+        this.addUserData.username != "" &&
+        this.addUserData.password != "" &&
+        this.addUser.passwordIsCorrect
+      ) {
+        this.addUser.filFullInput = true;
+      } else this.addUser.filFullInput = false;
+    },
+    resetAddUserData() {
+      this.addUserData.firstName = "";
+      this.addUserData.lastName = "";
+      this.addUserData.email = "";
+      this.addUserData.password = "";
+      this.addUserData.username = "";
+    },
+    async addUserRequest() {
+      await addUserApi();
+      this.resetAddUserData();
+    },
+   async editData(e) {
+      UserModule.changeEditPosition(e.$index);
+    },
   },
 
   async mounted() {
