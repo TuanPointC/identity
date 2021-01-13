@@ -8,8 +8,16 @@ export class GetUserResultsType {
     lockoutEnd!: null;
     lockoutEnabled!: boolean;
     isDeleted!: boolean;
-    roles!: [];
-    claims!: []
+    roles!: {
+        id: string,
+        name: string,
+        description: string,
+        reserved: boolean
+    }[];
+    claims!: {
+        type: string,
+        value: string
+    }[]
 }
 
 export class RequestGetUserType {

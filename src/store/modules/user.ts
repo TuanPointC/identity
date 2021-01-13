@@ -11,7 +11,6 @@ export interface UserState {
         pageSize: number;
         totalCount: number;
         isSorted: boolean;
-
     };
     EditPosition: number;
     RequestGetUser: RequestGetUserType;
@@ -28,7 +27,7 @@ class User extends VuexModule implements UserState {
         totalCount: 0,
         isSorted: true,
     };
-    public EditPosition= 0;
+    public EditPosition= -1;
     public RequestGetUser = {
         page: 1,
         pageSize: 5,
@@ -41,18 +40,13 @@ class User extends VuexModule implements UserState {
         q: '',
     }
 
-    public AddUser = {
+    public AddUser: AddUserType = {
         username: '',
         password: '',
         email: '',
         firstName: '',
         lastName: '',
-        roles: [] as {
-            id: string;
-            name: string;
-            description: string;
-            reserved: boolean;
-        }[],
+        roles: [],
         claims: [] as {
             type: string;
             value: string;

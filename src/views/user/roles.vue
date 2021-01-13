@@ -2,12 +2,10 @@
   <div>
     <MenuUser />
     <el-transfer
-      filterable
-      :filter-method="filterMethod"
-      filter-placeholder="Search..."
       v-model="value"
       :data="data"
       :titles="['Available', 'Assigned']"
+      @change="editRoles(), open2()"
     >
     </el-transfer>
   </div>
@@ -15,39 +13,74 @@
 
 <script>
 import MenuUser from "@/views/user/menu.vue";
+import { RolesModule } from "@/store/modules/roles";
+import { UserModule } from "@/store/modules/user";
+import { addRolesApi, deleteRolesApi } from "@/api/user";
 export default {
   components: {
     MenuUser,
   },
   data() {
-    const generateData = () => {
-      const data = [];
-      const states = [
-        "California",
-        "Illinois",
-        "Maryland",
-        "Texas",
-        "Florida",
-        "Colorado",
-        "Connecticut ",
-      ];
-      const initials = ["CA", "IL", "MD", "TX", "FL", "CO", "CT"];
-      states.forEach((city, index) => {
-        data.push({
-          label: city,
-          key: index,
-          initial: initials[index],
-        });
-      });
-      return data;
-    };
     return {
-      data: generateData(),
+      data: [],
       value: [],
-      filterMethod(query, item) {
-        return item.initial.toLowerCase().indexOf(query.toLowerCase()) > -1;
-      },
+      len: 0,
     };
+  },
+  computed: {
+    resultData() {
+      return UserModule.GetUser.results;
+    },
+    position() {
+      return UserModule.EditPosition;
+    },
+    rolesData() {
+      return RolesModule.GetRoles;
+    },
+  },
+  methods: {
+    async editRoles() {
+      const state = [],del = [];
+      for (let i = 0; i < this.data.length; i++) {
+        del.push(this.data[i].label);
+      }
+      console.log(del);
+      await deleteRolesApi(del);
+      for (let i = 0; i < this.value.length; i++) {
+        state.push(this.data[this.value[i]].label);
+      }
+      await addRolesApi(state);
+      await UserModule.getuserapi();
+    },
+    open2() {
+      this.$message({
+        message: "Congrats, this is a success message.",
+        type: "success",
+      });
+    },
+  },
+  async mounted() {
+    if (this.position < 0) {
+      this.$router.push("/Users");
+    } else {
+      await RolesModule.getRolesApi();
+      for (let i = 0; i < this.rolesData.length; i++) {
+        this.data.push({
+          label: this.rolesData[i].name,
+          key: i,
+        });
+      }
+      for (let i = 0; i < this.resultData[this.position].roles.length; i++) {
+        this.value.push(
+          this.data
+            .map((e) => {
+              return e.label;
+            })
+            .indexOf(this.resultData[this.position].roles[i].name)
+        );
+      }
+      this.len = this.value.length;
+    }
   },
 };
 </script>
@@ -79,5 +112,18 @@ export default {
 }
 .el-transfer-panel__list.is-filterable {
   height: 100% !important;
+}
+.el-checkbox__label {
+  font-size: 18px !important;
+}
+.el-checkbox.el-transfer-panel__item {
+  margin: 20px 0;
+}
+.el-transfer-panel__item.el-checkbox .el-checkbox__label {
+  padding-left: 41px !important;
+}
+.el-transfer-panel .el-checkbox__inner {
+  height: 20px !important;
+  width: 20px !important;
 }
 </style>

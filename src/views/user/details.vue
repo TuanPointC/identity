@@ -65,15 +65,40 @@
             :disabled="!changed"
             >Save</el-button
           >
-          <el-button type="info">Reset Password</el-button>
+          <el-button type="info" @click="centerDialogVisible = true"
+            >Reset Password</el-button
+          >
+          <el-dialog
+            title="Reset password"
+            :visible.sync="centerDialogVisible"
+            width="50%"
+            center
+          >
+            <div class="input">
+              <div class="label" style="width: 20%">New Password</div>
+              <el-input placeholder="Please input"></el-input>
+            </div>
+            <div class="input">
+              <div class="label" style="width: 20%">Repeat password</div>
+              <el-input placeholder="Please input"></el-input>
+            </div>
+            <span slot="footer" class="dialog-footer">
+              <el-button @click="centerDialogVisible = false">Cancel</el-button>
+              <el-button
+                type="success"
+                @click="(centerDialogVisible = false), open2()"
+                >Save</el-button
+              >
+            </span>
+          </el-dialog>
         </div>
         <div class="group2">
-          <el-button type="danger" @click="centerDialogVisible = true"
+          <el-button type="danger" @click="centerDialogVisible1 = true"
             >Delete</el-button
           >
           <el-dialog
             title="Warning"
-            :visible.sync="centerDialogVisible"
+            :visible.sync="centerDialogVisible1"
             width="30%"
             center
           >
@@ -82,10 +107,12 @@
               by default</span
             >
             <span slot="footer" class="dialog-footer">
-              <el-button @click="centerDialogVisible = false">Cancel</el-button>
+              <el-button @click="centerDialogVisible1 = false"
+                >Cancel</el-button
+              >
               <el-button
                 type="danger"
-                @click="(centerDialogVisible = false), open2(), deletes()"
+                @click="(centerDialogVisible1 = false), open2(), deletes()"
                 >Delete</el-button
               >
             </span>
@@ -106,6 +133,7 @@ export default {
   },
   data() {
     return {
+      centerDialogVisible1: false,
       centerDialogVisible: false,
       changed: false,
       active: true,
@@ -122,7 +150,7 @@ export default {
   methods: {
     open2() {
       this.$message({
-        message: "Congrats, this is a success message.",
+        message: "Data has been saved successfully",
         type: "success",
       });
     },
@@ -140,13 +168,17 @@ export default {
     },
   },
   mounted() {
-    if (
-      !this.editData[this.position].isDeleted &&
-      !this.editData[this.position].isBlocked
-    ) {
-      this.active = true;
+    if (this.position < 0) {
+      this.$router.push("/Users");
     } else {
-      this.active = false;
+      if (
+        !this.editData[this.position].isDeleted &&
+        !this.editData[this.position].isBlocked
+      ) {
+        this.active = true;
+      } else {
+        this.active = false;
+      }
     }
   },
 };
