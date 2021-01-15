@@ -1,11 +1,5 @@
 <template>
   <div>
-    <div class="top">
-      <div class="container">
-      
-        <h2>Roles</h2>
-      </div>
-    </div>
     <div class="container">
       <div class="search">
         <el-input placeholder="Seach..." v-model="input"></el-input>
@@ -13,7 +7,7 @@
 
       <div class="addRoles">
         <el-button type="success" @click="dialogVisible = true"
-          >Add User</el-button
+          >Add Role</el-button
         >
         <el-dialog
           title="New Role"
@@ -22,8 +16,12 @@
           center
         >
           <div class="input">
-            <div class="label">First Name</div>
-            <el-input placeholder="Please input"></el-input>
+            <div class="label">Name</div>
+            <el-input
+              placeholder="Please input"
+              v-model="addRolesClient.name"
+              @keyup.native="checkFillFullInputAddRoles"
+            ></el-input>
           </div>
           <div class="input">
             <div class="label">Descriptions</div>
@@ -31,17 +29,32 @@
               type="textarea"
               :autosize="{ minRows: 5 }"
               placeholder="Please input"
+              v-model="addRolesClient.description"
+              @keyup.native="checkFillFullInputAddRoles"
             >
             </el-input>
           </div>
           <span slot="footer" class="dialog-footer">
-            <el-button type="success" @click="dialogVisible = false"
+            <el-button
+              type="success"
+              @click="(dialogVisible = false), addRolesClientFunc(),open2()"
+              :disabled="disableButtonSaveAddRoles"
               >Save</el-button
             >
-            <el-button type="success" @click="dialogVisible = false"
+            <el-button
+              type="success"
+              @click="dialogVisible = false"
+              :disabled="disableButtonSaveAddRoles"
               >Save & Configure</el-button
             >
-            <el-button @click="dialogVisible = false">Cancel</el-button>
+            <el-button
+              @click="
+                dialogVisible = false;
+                addRolesClient.name = '';
+                addRolesClient.description = '';
+              "
+              >Cancel</el-button
+            >
           </span>
         </el-dialog>
       </div>
@@ -49,9 +62,30 @@
       <div class="tableUser" style="margin-top: 20px">
         <el-table :data="rolesData" style="width: 100%" stripe>
           <el-table-column prop="name" label="Username"> </el-table-column>
-          <el-table-column prop="description" label="Description"> </el-table-column>
+          <el-table-column prop="description" label="Description">
+          </el-table-column>
+          <el-table-column width="150">
+            <template slot-scope="scope" style="display: flex">
+              <span
+                v-if="scope.row.reserved"
+                style="
+                  font-weight: bolder;
+                  background: #c0c4cc;
+                  padding: 0 15px;
+                  border-radius: 15px;
+                  border: 1px solid;
+                "
+                >Reserved</span
+              >
+            </template>
+          </el-table-column>
           <el-table-column width="100">
-            <el-button circle><i class="fas fa-pencil-alt"></i></el-button>
+            <template style="display: flex" slot-scope="scope">
+              <router-link to="/Roles/details">
+                <el-button circle @click="position(scope)"
+                  ><i class="fas fa-pencil-alt"></i></el-button
+              ></router-link>
+            </template>
           </el-table-column>
         </el-table>
       </div>
@@ -60,31 +94,65 @@
 </template>
 
 <script>
-import {RolesModule} from '@/store/modules/roles'
+import { RolesModule } from "@/store/modules/roles";
+
 export default {
   data() {
     return {
       value: "",
       dialogVisible: false,
       input: "",
+      disableButtonSaveAddRoles: true,
+      addRolesClient: {
+        name: "",
+        description: "",
+      },
+      editRolesClient: {
+        id: "",
+        name: "",
+        description: "",
+      },
     };
   },
-  computed:{
-    rolesData(){
+  computed: {
+    rolesData() {
       return RolesModule.GetRoles;
-    }
+    },
   },
-  mounted(){
+  methods: {
+    open2() {
+      this.$message({
+        message: "Congrats, this is a success message.",
+        type: "success",
+      });
+    },
+    async addRolesClientFunc() {
+      await RolesModule.addRoles(this.addRolesClient);
+      await RolesModule.getRolesApi();
+      this.addRolesClient.name = "";
+      this.addRolesClient.description = "";
+    },
+    checkFillFullInputAddRoles() {
+      if (
+        this.addRolesClient.name != "" &&
+        this.addRolesClient.description != ""
+      ) {
+        this.disableButtonSaveAddRoles = false;
+      } else {
+        this.disableButtonSaveAddRoles = true;
+      }
+    },
+    position(e) {
+      RolesModule.changePosition(e.$index);
+    },
+  },
+  mounted() {
     RolesModule.getRolesApi();
-  }
+  },
 };
 </script>
 
 <style lang='scss' scoped>
-.top {
-  padding: 10px 0;
-  background: #ecf0f1;
-}
 .search {
   margin: 20px 0;
 }

@@ -143,8 +143,8 @@ export default {
     editData() {
       return UserModule.GetUser.results;
     },
-    position() {
-      return UserModule.EditPosition;
+     position() {
+       return  UserModule.EditPosition;
     },
   },
   methods: {
@@ -167,10 +167,11 @@ export default {
       UserModule.changeActive(this.active);
     },
   },
-  mounted() {
+   mounted() {
     if (this.position < 0) {
       this.$router.push("/Users");
     } else {
+     
       if (
         !this.editData[this.position].isDeleted &&
         !this.editData[this.position].isBlocked

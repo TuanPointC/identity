@@ -116,8 +116,26 @@
 
       <div class="tableUser" style="margin-top: 20px">
         <el-table :data="GetUser.results" style="width: 100%" stripe>
-          <el-table-column prop="username" label="Username"> </el-table-column>
-          <el-table-column>
+          <el-table-column width="50">
+            <template slot-scope="scope">
+              <i
+                class="far fa-trash-alt"
+                style="color: red"
+                v-if="GetUser.results[scope.$index].isDeleted"
+              ></i>
+              <i
+                class="far fa-check-circle"
+                style="color: green"
+                v-if="!GetUser.results[scope.$index].isDeleted && !GetUser.results[scope.$index].isBlocked "
+              ></i>
+            </template>
+          </el-table-column>
+          <el-table-column label="Username">
+            <template slot-scope="scope">
+              {{ scope.row.username }}
+            </template>
+          </el-table-column>
+          <el-table-column label="Full Name">
             <template slot-scope="scope">
               {{ scope.row.firstName + " " + scope.row.lastName }}
             </template>
@@ -125,10 +143,9 @@
           <el-table-column prop="email" label="Email Address">
           </el-table-column>
           <el-table-column>
-            <template slot-scope="scope">
-              <router-link to="/Users/details">
-                <el-button circle @click="editData(scope)"
-                  ><i class="fas fa-pencil-alt"></i></el-button
+            <template slot-scope="scope" @click.native="editData(scope)">
+              <router-link to="/Users/details" @click.native="editData(scope)">
+                <el-button circle ><i class="fas fa-pencil-alt"></i></el-button
               ></router-link>
             </template>
           </el-table-column>
@@ -194,6 +211,11 @@ export default {
         passwordIsCorrect: true,
         filFullInput: false,
       },
+      mode: {
+        active: 0,
+        blocked: 0,
+        deleted: 0,
+      },
     };
   },
   computed: {
@@ -206,9 +228,9 @@ export default {
     addUserData() {
       return UserModule.AddUser;
     },
-    GetPositionEditUser(){
+    GetPositionEditUser() {
       return UserModule.EditPosition;
-    }
+    },
   },
 
   methods: {
@@ -234,7 +256,31 @@ export default {
       UserModule.getuserapi();
     },
     changeState(e) {
-      this.RequestGetUser.state = e;
+      if (e == "active") {
+        if (this.mode.active % 2 == 0) {
+          this.RequestGetUser.state = e;
+          this.mode.active++;
+        } else {
+          this.RequestGetUser.state = "";
+          this.mode.active++;
+        }
+      } else if (e == "block") {
+        if (this.mode.blocked % 2 == 0) {
+          this.RequestGetUser.state = e;
+          this.mode.blocked++;
+        } else {
+          this.RequestGetUser.state = "";
+          this.mode.blocked++;
+        }
+      } else {
+        if (this.mode.deleted % 2 == 0) {
+          this.RequestGetUser.state = e;
+          this.mode.deleted++;
+        } else {
+          this.RequestGetUser.state = "";
+          this.mode.deleted++;
+        }
+      }
       this.RequestGetUser.page = 1;
       UserModule.getuserapi();
     },
@@ -273,8 +319,9 @@ export default {
       await addUserApi();
       this.resetAddUserData();
     },
-   async editData(e) {
-      UserModule.changeEditPosition(e.$index);
+    async editData(e) {
+      console.log(e.$index);
+      await UserModule.changeEditPosition(e.$index);
     },
   },
 

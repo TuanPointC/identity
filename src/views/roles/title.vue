@@ -3,7 +3,7 @@
     <div class="top">
       <div class="container">
         <span>Home </span>
-        <h2>User</h2>
+        <h2>Roles</h2>
       </div>
     </div>
     <router-view />
@@ -11,8 +11,11 @@
 </template>
 
 <script>
-export default{
-}
+//import { RolesModule } from "@/store/modules/roles"
+export default {
+  
+ 
+};
 </script>
 
 <style scoped lang='scss'>

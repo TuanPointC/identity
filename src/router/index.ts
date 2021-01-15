@@ -2,6 +2,9 @@ import Vue from 'vue'
 import VueRouter, { RouteConfig } from 'vue-router'
 import UserHome from '../views/user/home.vue'
 import RolesrHome from '../views/roles/home.vue'
+import UsersRoles from '../views/roles/users.vue'
+import TitleRoles from '../views/roles/title.vue'
+import DetailsRoles from '../views/roles/details.vue'
 import DetailsUser from '../views/user/details.vue'
 import TitleUser from '../views/user/title.vue'
 import RolesUser from '../views/user/roles.vue'
@@ -29,15 +32,15 @@ const routes: Array<RouteConfig> = [
       },
       {
         path: 'roles',
-        component:RolesUser
+        component: RolesUser
       },
       {
         path: 'additionalDetails',
-      
+
       },
       {
         path: 'application',
-        
+
       },
     ]
   },
@@ -45,7 +48,22 @@ const routes: Array<RouteConfig> = [
 
   {
     path: '/Roles',
-    component: RolesrHome,
+    component: TitleRoles,
+    children: [
+      {
+        path: '/',
+        component: RolesrHome
+      },
+      {
+        path: 'details',
+        component: DetailsRoles
+      },
+      {
+        path: 'users',
+        component: UsersRoles
+      },
+
+    ]
   },
 
 ]

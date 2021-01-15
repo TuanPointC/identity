@@ -24,6 +24,7 @@ export default {
     return {
       data: [],
       value: [],
+      value1: [],
       len: 0,
     };
   },
@@ -40,17 +41,28 @@ export default {
   },
   methods: {
     async editRoles() {
-      const state = [],del = [];
-      for (let i = 0; i < this.data.length; i++) {
-        del.push(this.data[i].label);
+      if (this.len < this.value.length) {
+        const state = [];
+        for (let i = this.len; i < this.value.length; i++) {
+          state.push(this.data[this.value[i]].label);
+        }
+        await addRolesApi(state);
+        this.len += this.value.length - this.len;
+        //await UserModule.getuserapi();
+      } 
+      else {
+        const diff = [];
+        const joined = this.value.concat(this.value1);
+        for (let i = 0; i < joined.length; i++) {
+          const current = joined[i];
+          if (joined.indexOf(current) == joined.lastIndexOf(current)) {
+            diff.push(this.data[current].label);
+          }
+        }
+        this.len -= this.value1.length;
+        this.value1 = this.value;
+        await deleteRolesApi(diff);
       }
-      console.log(del);
-      await deleteRolesApi(del);
-      for (let i = 0; i < this.value.length; i++) {
-        state.push(this.data[this.value[i]].label);
-      }
-      await addRolesApi(state);
-      await UserModule.getuserapi();
     },
     open2() {
       this.$message({
@@ -64,6 +76,7 @@ export default {
       this.$router.push("/Users");
     } else {
       await RolesModule.getRolesApi();
+      await UserModule.getuserapi();
       for (let i = 0; i < this.rolesData.length; i++) {
         this.data.push({
           label: this.rolesData[i].name,
@@ -79,6 +92,7 @@ export default {
             .indexOf(this.resultData[this.position].roles[i].name)
         );
       }
+      this.value1 = this.value;
       this.len = this.value.length;
     }
   },

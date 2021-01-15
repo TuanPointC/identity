@@ -1,6 +1,7 @@
 import axios from 'axios'
-
-const URL = 'http://192.168.11.212:5000/Roles'
+import { RolesModule } from '@/store/modules/roles'
+const URL = 'http://10.20.99.4:5000/Roles'
+import { GetUserRolesResultsType } from '@/intenties/rolesTypeData'
 
 export const getRoles = () => {
     const data =
@@ -21,3 +22,61 @@ export const getRoles = () => {
             })
     return data;
 }
+
+export const addRoles = () => {
+    axios({
+        method: 'post',
+        url: URL,
+        data: RolesModule.AddRoles
+    })
+}
+
+export const getUsersRoles = (param: {
+    page: number;
+    pageSize: number;
+    q: string;
+}) => {
+    const data =
+        axios.request<{
+            results: GetUserRolesResultsType[];
+            currentPage: number;
+            pageCount: number;
+            pageSize: number;
+            totalCount: number;
+            isSorted: boolean;
+        }>({
+            method: 'get',
+            params: param,
+            url: URL + '/' + RolesModule.GetRoles[RolesModule.Position].id + '/users'
+        })
+            .then((response) => {
+                return response.data;
+            })
+    return data;
+}
+
+export const deleteRoles = () => {
+    axios({
+        method: 'delete',
+        url: URL + '/' + RolesModule.GetRoles[RolesModule.Position].id
+    })
+}
+export const edituseraRolesApi = (data: {
+    id: string;
+    name: string;
+    description: string;
+    reserved: boolean;
+}) => {
+    axios({
+        method: 'put',
+        url: URL + '/' + RolesModule.GetRoles[RolesModule.Position].id + '/users',
+        data: data
+    })
+}
+
+// export const deleteUserRoles=()=>{
+//     axios({
+//         method:'delete',
+//         url:'http://10.20.99.4:5000/Users/'+'/roles',
+//     })
+// }

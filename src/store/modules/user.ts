@@ -77,8 +77,8 @@ class User extends VuexModule implements UserState {
         this.EditPosition=e;
     }
     @Action
-    public changeEditPosition(e: number){
-        this.CHANGE_EDIT_POSITION(e);
+    public async changeEditPosition(e: number){
+        await this.CHANGE_EDIT_POSITION(e);
     }
 
     @Mutation
