@@ -44,4 +44,12 @@ export default {
     }
   }
 }
+.tableUser button {
+    height: 40px;
+    width: 40px;
+}
+.tableData .cell button[data-v-924315e8] {
+    height: 40px;
+    width: 40px;
+}
 </style>

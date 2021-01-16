@@ -74,9 +74,23 @@ export const edituseraRolesApi = (data: {
     })
 }
 
-// export const deleteUserRoles=()=>{
-//     axios({
-//         method:'delete',
-//         url:'http://10.20.99.4:5000/Users/'+'/roles',
-//     })
-// }
+export const deleteUserRoles=(subject: string, data: string[])=>{
+    axios({
+        method:'delete',
+        url:'http://10.20.99.4:5000/Users/'+subject+'/roles',
+        data:data
+    })
+}
+
+export const editRolesApi=()=>{
+    axios({
+        method:'put',
+        url:URL+'/'+RolesModule.GetRoles[RolesModule.Position].id,
+        data:{
+            id:RolesModule.GetRoles[RolesModule.Position].id,
+            name: RolesModule.GetRoles[RolesModule.Position].name,
+            description:RolesModule.GetRoles[RolesModule.Position].description,
+            reserved: true
+        }
+    })
+}

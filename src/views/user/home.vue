@@ -126,7 +126,10 @@
               <i
                 class="far fa-check-circle"
                 style="color: green"
-                v-if="!GetUser.results[scope.$index].isDeleted && !GetUser.results[scope.$index].isBlocked "
+                v-if="
+                  !GetUser.results[scope.$index].isDeleted &&
+                  !GetUser.results[scope.$index].isBlocked
+                "
               ></i>
             </template>
           </el-table-column>
@@ -143,10 +146,8 @@
           <el-table-column prop="email" label="Email Address">
           </el-table-column>
           <el-table-column>
-            <template slot-scope="scope" @click.native="editData(scope)">
-              <router-link to="/Users/details" @click.native="editData(scope)">
-                <el-button circle ><i class="fas fa-pencil-alt"></i></el-button
-              ></router-link>
+            <template slot-scope="scope" >
+              <el-button circle @click.native="editData(scope)"><i class="fas fa-pencil-alt"></i></el-button>
             </template>
           </el-table-column>
         </el-table>
@@ -320,8 +321,8 @@ export default {
       this.resetAddUserData();
     },
     async editData(e) {
-      console.log(e.$index);
       await UserModule.changeEditPosition(e.$index);
+      this.$router.push('/Users/details');
     },
   },
 

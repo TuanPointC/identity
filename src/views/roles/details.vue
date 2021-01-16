@@ -24,7 +24,7 @@
       <hr />
       <div class="buttonFunction">
         <div class="group1">
-          <el-button type="success" @click="open2" :disabled="changed"
+          <el-button type="success" @click="open2 ,editRole()" :disabled="changed"
             >Save</el-button
           >
         </div>
@@ -66,7 +66,7 @@
 <script>
 import MenuRoles from "@/views/roles/menu";
 import { RolesModule } from "@/store/modules/roles";
-import { deleteRoles } from "@/api/roles";
+import { deleteRoles, editRolesApi } from "@/api/roles";
 export default {
   components: {
     MenuRoles,
@@ -102,13 +102,17 @@ export default {
     chanedInput() {
       this.changed = false;
     },
+    async editRole() {
+      await editRolesApi();
+      await RolesModule.getRolesApi();
+      this.$router.push('/Roles');
+    },
   },
   async mounted() {
     if (this.currentPosition < 0) {
       this.$router.push("/Roles");
     } else {
       this.CanEdit = this.rolesData[this.currentPosition].reserved;
-
     }
   },
 };

@@ -1,11 +1,8 @@
 <template>
   <div>
+    <Menu />
     <div class="container">
-      <div class="search">
-        <el-input placeholder="Seach..." v-model="input"></el-input>
-      </div>
-
-      <div class="addRoles">
+      <div class="addRoles" style="margin-top: 20px">
         <el-button type="success" @click="dialogVisible = true"
           >Add Role</el-button
         >
@@ -17,11 +14,7 @@
         >
           <div class="input">
             <div class="label">Name</div>
-            <el-input
-              placeholder="Please input"
-              v-model="addRolesClient.name"
-              @keyup.native="checkFillFullInputAddRoles"
-            ></el-input>
+            <el-input placeholder="Please input"></el-input>
           </div>
           <div class="input">
             <div class="label">Descriptions</div>
@@ -29,15 +22,13 @@
               type="textarea"
               :autosize="{ minRows: 5 }"
               placeholder="Please input"
-              v-model="addRolesClient.description"
-              @keyup.native="checkFillFullInputAddRoles"
             >
             </el-input>
           </div>
           <span slot="footer" class="dialog-footer">
             <el-button
               type="success"
-              @click="(dialogVisible = false), addRolesClientFunc(), open2()"
+              @click="(dialogVisible = false), open2()"
               :disabled="disableButtonSaveAddRoles"
               >Save</el-button
             >
@@ -60,63 +51,58 @@
       </div>
 
       <div class="tableUser" style="margin-top: 20px">
-        <el-table :data="rolesData" style="width: 100%" stripe>
-          <el-table-column prop="name" label="Username"> </el-table-column>
-          <el-table-column prop="description" label="Description">
-          </el-table-column>
-          <el-table-column width="150">
-            <template slot-scope="scope" style="display: flex">
-              <span
-                v-if="scope.row.reserved"
-                style="
-                  font-weight: bolder;
-                  background: #c0c4cc;
-                  padding: 0 15px;
-                  border-radius: 15px;
-                  border: 1px solid;
-                "
-                >Reserved</span
-              >
+        <el-table
+          :data="userData.results[position].claims"
+          style="width: 100%"
+          stripe
+        >
+          <el-table-column prop="type" label="Type"> </el-table-column>
+          <el-table-column prop="value" label="Value"> </el-table-column>
+          <el-table-column width="50">
+            <template style="display: flex">
+              <el-button circle><i class="fas fa-pencil-alt"></i></el-button>
             </template>
           </el-table-column>
-          <el-table-column width="100">
-            <template style="display: flex" slot-scope="scope">
-              <router-link to="/Roles/details">
-                <el-button circle @click="position(scope)"
-                  ><i class="fas fa-pencil-alt"></i></el-button
-              ></router-link>
+          <el-table-column width="70">
+            <template style="display: flex">
+              <el-button circle
+                ><i class="fas fa-times" style="color: red"></i
+              ></el-button>
             </template>
           </el-table-column>
         </el-table>
+      </div>
+
+      <div class="count">
+        <p style="font-size: 12px; color: #9b9797; margin-top:20px"
+          >{{ userData.results[position].claims.length }} result(s) found</p
+        >
       </div>
     </div>
   </div>
 </template>
 
 <script>
-import { RolesModule } from "@/store/modules/roles";
-
+import Menu from "./menu.vue";
+import { UserModule } from "@/store/modules/user";
 export default {
+  components: {
+    Menu,
+  },
   data() {
     return {
       value: "",
       dialogVisible: false,
       input: "",
       disableButtonSaveAddRoles: true,
-      addRolesClient: {
-        name: "",
-        description: "",
-      },
-      editRolesClient: {
-        id: "",
-        name: "",
-        description: "",
-      },
     };
   },
   computed: {
-    rolesData() {
-      return RolesModule.GetRoles;
+    userData() {
+      return UserModule.GetUser;
+    },
+    position() {
+      return UserModule.EditPosition;
     },
   },
   methods: {
@@ -126,29 +112,11 @@ export default {
         type: "success",
       });
     },
-    async addRolesClientFunc() {
-      await RolesModule.addRoles(this.addRolesClient);
-      setInterval(RolesModule.getRolesApi(), 500);
-      this.$forceUpdate();
-      this.addRolesClient.name = "";
-      this.addRolesClient.description = "";
-    },
-    checkFillFullInputAddRoles() {
-      if (
-        this.addRolesClient.name != "" &&
-        this.addRolesClient.description != ""
-      ) {
-        this.disableButtonSaveAddRoles = false;
-      } else {
-        this.disableButtonSaveAddRoles = true;
-      }
-    },
-    position(e) {
-      RolesModule.changePosition(e.$index);
-    },
   },
   mounted() {
-    RolesModule.getRolesApi();
+    if (this.position < 0) {
+      this.$router.push("/Users");
+    }
   },
 };
 </script>

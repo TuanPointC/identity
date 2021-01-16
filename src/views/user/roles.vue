@@ -5,6 +5,7 @@
       v-model="value"
       :data="data"
       :titles="['Available', 'Assigned']"
+      :render-content="renderFunc"
       @change="editRoles(), open2()"
     >
     </el-transfer>
@@ -26,6 +27,16 @@ export default {
       value: [],
       value1: [],
       len: 0,
+      renderFunc(h, option) {
+        return (
+          <p>
+            <b>{option.label}</b>{" "}
+            <p style="margin-top: -7px;">
+              <i style="color:gray;font-size:13px">{option.description}</i>
+            </p>
+          </p>
+        );
+      },
     };
   },
   computed: {
@@ -48,9 +59,7 @@ export default {
         }
         await addRolesApi(state);
         this.len += this.value.length - this.len;
-        //await UserModule.getuserapi();
-      } 
-      else {
+      } else {
         const diff = [];
         const joined = this.value.concat(this.value1);
         for (let i = 0; i < joined.length; i++) {
@@ -80,6 +89,7 @@ export default {
       for (let i = 0; i < this.rolesData.length; i++) {
         this.data.push({
           label: this.rolesData[i].name,
+          description: this.rolesData[i].description,
           key: i,
         });
       }
@@ -131,7 +141,7 @@ export default {
   font-size: 18px !important;
 }
 .el-checkbox.el-transfer-panel__item {
-  margin: 20px 0;
+  margin-bottom: 35px ;
 }
 .el-transfer-panel__item.el-checkbox .el-checkbox__label {
   padding-left: 41px !important;
@@ -139,5 +149,8 @@ export default {
 .el-transfer-panel .el-checkbox__inner {
   height: 20px !important;
   width: 20px !important;
+}
+.el-transfer-panel__list {
+    height: 310px!important;
 }
 </style>

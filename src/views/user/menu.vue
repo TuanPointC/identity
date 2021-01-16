@@ -21,7 +21,7 @@
             </router-link></el-menu-item
           >
           <el-menu-item index="3">
-            <router-link to="/Users/additionalDetails"
+            <router-link to="/Users/claims"
               >Additional Details
             </router-link></el-menu-item
           >
@@ -48,6 +48,7 @@
 </template>
 
 <script>
+
 export default {
   data() {
     return {

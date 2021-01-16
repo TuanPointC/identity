@@ -113,7 +113,7 @@
       </div>
 
       <div class="tableData" style="margin-top: 20px">
-        <el-table :data="usersRolesData.results" style="width: 100%" stripe>
+        <el-table :data="usersRolesDataResults" style="width: 100%" stripe>
           <el-table-column label="Username">
             <template slot-scope="scope">
               {{ scope.row.username }}
@@ -127,8 +127,8 @@
           <el-table-column prop="email" label="Email Address">
           </el-table-column>
           <el-table-column width="100">
-            <template>
-              <el-button circle @click.native="dialogVisible1 = true">
+            <template slot-scope="scope">
+              <el-button circle @click.native="dialogVisible1 = true,subject=scope.row.subject">
                 <i class="fas fa-times" style="color: red"></i
               ></el-button>
             </template>
@@ -143,7 +143,7 @@
           <span>This user will be deleted from the dataset</span>
           <span slot="footer" class="dialog-footer">
             <el-button @click="dialogVisible1 = false">Cancel</el-button>
-            <el-button type="danger" @click="dialogVisible1 = false"
+            <el-button type="danger" @click="dialogVisible1 = false,deleteUserFromRole()"
               >Delete</el-button
             >
           </span>
@@ -179,7 +179,7 @@
 import MenuRoles from "@/views/roles/menu";
 import { RolesModule } from "@/store/modules/roles";
 import { getUsers } from "@/api/user";
-import { getUsersRoles, edituseraRolesApi } from "@/api/roles";
+import { getUsersRoles, edituseraRolesApi ,deleteUserRoles} from "@/api/roles";
 export default {
   components: {
     MenuRoles,
@@ -220,6 +220,7 @@ export default {
       filter: [],
       adding: [],
       removing: [],
+      subject:'',
     };
   },
   computed: {
@@ -235,6 +236,9 @@ export default {
     getUserRolesPageSize() {
       return RolesModule.GetUserRolesPageSize;
     },
+    usersRolesDataResults(){
+      return RolesModule.GetUserRoles.results;
+    }
   },
   async mounted() {
     if (RolesModule.Position < 0) {
@@ -317,19 +321,9 @@ export default {
         });
       }
       await edituseraRolesApi(data);
-      RolesModule.getUsersRolesApi();
+      setInterval(RolesModule.getUsersRolesApi,500); 
     },
-    // async manageUserRoles() {
-    //   this.allUsers = (await getUsers({ q: this.input1 })).results.filter(
-    //     function (e) {
-    //       if (e.isDeleted == false) return e;
-    //     }
-    //   );
-    //   this.usersInRole = await (await getUsersRoles({ q: this.input1 }))
-    //     .results;
-    //   this.len1 = this.allUsers.length;
-    //   this.len2 = this.usersInRole.length;
-    // },
+  
     changeTag(e) {
       if (this.filter[e].type == "success") {
         this.filter[e].type = "danger";
@@ -365,6 +359,11 @@ export default {
         }
       }
     },
+
+    async deleteUserFromRole(){
+      await deleteUserRoles(this.subject, [this.getRoles[this.getPosition].name]);
+      setInterval(RolesModule.getUsersRolesApi,500); 
+    }
   },
 };
 </script>

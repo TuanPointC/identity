@@ -20,7 +20,7 @@ export interface UserState {
 @Module({ dynamic: true, store, name: 'user' })
 class User extends VuexModule implements UserState {
     public GetUser = {
-        results: [] as GetUserResultsType[],
+        results: [] as GetUserResultsType[] ,
         currentPage: 0,
         pageCount: 0,
         pageSize: 0,

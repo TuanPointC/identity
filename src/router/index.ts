@@ -1,15 +1,21 @@
 import Vue from 'vue'
 import VueRouter, { RouteConfig } from 'vue-router'
+
 import UserHome from '../views/user/home.vue'
-import RolesrHome from '../views/roles/home.vue'
-import UsersRoles from '../views/roles/users.vue'
-import TitleRoles from '../views/roles/title.vue'
-import DetailsRoles from '../views/roles/details.vue'
+import ClaimsUser from '../views/user/claims.vue'
 import DetailsUser from '../views/user/details.vue'
 import TitleUser from '../views/user/title.vue'
 import RolesUser from '../views/user/roles.vue'
 
-//import { component } from 'vue/types/umd'
+import RolesrHome from '../views/roles/home.vue'
+import UsersRoles from '../views/roles/users.vue'
+import TitleRoles from '../views/roles/title.vue'
+import DetailsRoles from '../views/roles/details.vue'
+
+
+import TitleClaim from '../views/claim/title.vue'
+import ClaimHome from '../views/claim/home.vue'
+import DetailsClaims from '../views/claim/details.vue'
 
 Vue.use(VueRouter)
 
@@ -35,8 +41,8 @@ const routes: Array<RouteConfig> = [
         component: RolesUser
       },
       {
-        path: 'additionalDetails',
-
+        path: 'claims',
+        component: ClaimsUser
       },
       {
         path: 'application',
@@ -65,6 +71,21 @@ const routes: Array<RouteConfig> = [
 
     ]
   },
+
+  {
+    path: '/ClaimTypes',
+    component: TitleClaim,
+    children: [
+      {
+        path: '/',
+        component: ClaimHome
+      },
+      {
+        path: 'details',
+        component: DetailsClaims
+      },
+    ]
+  }
 
 ]
 
