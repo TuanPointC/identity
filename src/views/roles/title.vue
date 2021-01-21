@@ -2,19 +2,22 @@
   <div>
     <div class="top">
       <div class="container">
-        <span>Home </span>
+        <span>Home {{breakcrum}}</span>
         <h2>Roles</h2>
       </div>
     </div>
-    <router-view />
+    <router-view/>
   </div>
 </template>
 
 <script>
-//import { RolesModule } from "@/store/modules/roles"
+import { BreakCrumbModule } from "@/store/modules/breakCrumb";
 export default {
-  
- 
+   computed:{
+    breakcrum(){
+      return BreakCrumbModule.Router;
+    }
+  },
 };
 </script>
 

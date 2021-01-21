@@ -1,7 +1,8 @@
 import axios from 'axios'
 import { GetClaimsType } from '@/intenties/claimTypesData'
 import { ClaimsModule } from '@/store/modules/claim'
-const URL = 'http://10.20.99.4:5000/ClaimTypes'
+//const URL = 'http://10.20.99.4:5000/ClaimTypes'
+const URL= 'http://192.168.11.212:5000/ClaimTypes'
 
 
 

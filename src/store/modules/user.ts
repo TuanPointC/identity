@@ -53,6 +53,7 @@ class User extends VuexModule implements UserState {
         }[],
     }
 
+
     @Mutation
     private GET_USER_API(userData: {
         results: GetUserResultsType[];
@@ -90,6 +91,7 @@ class User extends VuexModule implements UserState {
     private changeActive(e: boolean){
         this.CHANGE_ACTIVE(e);
     }
+
 }
 
 export const UserModule = getModule(User)

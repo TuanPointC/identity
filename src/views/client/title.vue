@@ -2,8 +2,8 @@
   <div>
     <div class="top">
       <div class="container">
-        <span>Home {{breakcrum}}</span>
-        <h2>Claim Types</h2>
+        <span>Home</span>
+        <h2> Clients</h2>
       </div>
     </div>
     <router-view />
@@ -11,14 +11,8 @@
 </template>
 
 <script>
-import { BreakCrumbModule } from "@/store/modules/breakCrumb";
 
 export default {
-  computed:{
-    breakcrum(){
-      return BreakCrumbModule.Router;
-    }
-  },
 
 };
 </script>

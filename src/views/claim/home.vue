@@ -16,7 +16,7 @@
         <el-dialog
           title="New Role"
           :visible.sync="dialogVisible"
-          width="60%"
+          width="70%"
           center
         >
           <div class="input">
@@ -124,7 +124,12 @@
               <i class="far fa-check-circle" v-if="scope.row.required"></i>
             </template>
           </el-table-column>
-          <el-table-column label="User Editable" sortable align="center"  width="150">
+          <el-table-column
+            label="User Editable"
+            sortable
+            align="center"
+            width="150"
+          >
             <template slot-scope="scope">
               <i class="fas fa-times" v-if="!scope.row.required"></i>
               <i class="far fa-check-circle" v-if="scope.row.required"></i>
@@ -147,10 +152,17 @@
           </el-table-column>
           <el-table-column width="70">
             <template style="display: flex" slot-scope="scope">
-              <el-button circle @click="editClaim(scope)"><i class="fas fa-pencil-alt" ></i></el-button>
+              <el-button circle @click="editClaim(scope)"
+                ><i class="fas fa-pencil-alt"></i
+              ></el-button>
             </template>
           </el-table-column>
         </el-table>
+      </div>
+      <div class="changeCurrentPage">
+        <p style="font-size: 12px; color: #9b9797; margin-top: 20px">
+          {{ claimsData.length }} results(s) found
+        </p>
       </div>
     </div>
   </div>
@@ -176,7 +188,6 @@ export default {
     addClaims() {
       return ClaimsModule.AddClaims;
     },
-    
   },
   methods: {
     open2() {
@@ -188,7 +199,7 @@ export default {
 
     async addClaimCient() {
       await addClaimsApi();
-      ClaimsModule.getClaims();
+      setTimeout(ClaimsModule.getClaims, 500);
       ClaimsModule.resetAddClaims();
     },
 
@@ -209,10 +220,10 @@ export default {
       }
     },
 
-    async editClaim(e){
-       await ClaimsModule.changePosition(e.$index);
-       this.$router.push('/ClaimTypes/details');
-    }
+    async editClaim(e) {
+      await ClaimsModule.changePosition(e.$index);
+      this.$router.push("/ClaimTypes/details");
+    },
   },
   async mounted() {
     await ClaimsModule.getClaims("");

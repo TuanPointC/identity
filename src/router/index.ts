@@ -17,6 +17,11 @@ import TitleClaim from '../views/claim/title.vue'
 import ClaimHome from '../views/claim/home.vue'
 import DetailsClaims from '../views/claim/details.vue'
 
+import {BreakCrumbModule} from '../store/modules/breakCrumb'
+
+import TitleClient from '../views/client/title.vue'
+import ClientHome from '../views/client/home.vue'
+
 Vue.use(VueRouter)
 
 const routes: Array<RouteConfig> = [
@@ -34,7 +39,8 @@ const routes: Array<RouteConfig> = [
       },
       {
         path: 'details',
-        component: DetailsUser
+        component: DetailsUser,
+        props: 'details',
       },
       {
         path: 'roles',
@@ -85,6 +91,16 @@ const routes: Array<RouteConfig> = [
         component: DetailsClaims
       },
     ]
+  },
+  {
+    path: '/Clients',
+    component: TitleClient,
+    children: [
+      {
+        path: '/',
+        component: ClientHome
+      },
+    ]
   }
 
 ]
@@ -93,6 +109,15 @@ const router = new VueRouter({
   mode: 'history',
   base: process.env.BASE_URL,
   routes
+})
+
+router.afterEach((to) => {
+  if(to.fullPath.split('/').length>2){
+    BreakCrumbModule.changeRouter( to.fullPath.split('/')[2]);
+  }
+  else{
+    BreakCrumbModule.changeRouter('');
+  }
 })
 
 export default router

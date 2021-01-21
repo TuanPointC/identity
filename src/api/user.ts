@@ -2,7 +2,8 @@ import { RequestGetUserType, GetUserResultsType } from '@/intenties/userTypeData
 import axios from 'axios'
 import { UserModule } from '@/store/modules/user'
 
-const URL = 'http://10.20.99.4:5000/Users'
+//const URL = 'http://10.20.99.4:5000/Users'
+const URL = 'http://192.168.11.212:5000/Users'
 
 export const getUsers = (param: RequestGetUserType) => {
   const data =
@@ -61,3 +62,39 @@ export const deleteRolesApi = (data: string[]) => {
     data: data
   })
 }
+
+export const addUserClaims = (data: {
+  type: string;
+  value: string;
+}) => {
+  axios({
+    method: 'post',
+    url: URL + '/' + UserModule.GetUser.results[UserModule.EditPosition].subject + '/claims',
+    data: data
+  })
+}
+
+export const deleteUserClaims = (data: {
+  type: string;
+  value: string;
+}) => {
+  axios({
+    method: 'delete',
+    url: URL + '/' + UserModule.GetUser.results[UserModule.EditPosition].subject + '/claims',
+    data: data
+  })
+}
+
+export const editUserClaims = (data: {
+  oldClaimType: string;
+  oldClaimValue: string;
+  newClaimType: string;
+  newClaimValue: string;
+}) => {
+  axios({
+    method: 'put',
+    url: URL + '/' + UserModule.GetUser.results[UserModule.EditPosition].subject + '/claims',
+    data: data
+  })
+}
+

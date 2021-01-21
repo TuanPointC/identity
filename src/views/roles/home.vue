@@ -89,6 +89,11 @@
           </el-table-column>
         </el-table>
       </div>
+      <div class="changeCurrentPage">
+        <p style="font-size: 12px; color: #9b9797; margin-top:20px">
+          {{ rolesData.length }} results(s) found
+        </p>
+      </div>
     </div>
   </div>
 </template>

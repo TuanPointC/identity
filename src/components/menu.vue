@@ -28,7 +28,6 @@
           >
           <el-menu-item index="5-1">item one</el-menu-item>
           <el-menu-item index="5-2">item two</el-menu-item>
-          <el-menu-item index="5-3">item three</el-menu-item>
         </el-submenu>
         <el-menu-item index="/Auditing"
           ><router-link to="/Auditing">Auditing </router-link></el-menu-item
