@@ -6,11 +6,13 @@ import {getClientApi} from '@/api/client'
 
 export interface ClientState {
     GetClient: ClientDataType[];
+    Position: number;
 }
 
 @Module({ dynamic: true, store, name: 'client' })
 class Client extends VuexModule implements ClientState {
   public GetClient: ClientDataType[]=[];
+  public Position= -1;
 
   @Mutation
   private GET_CLIENT(e: ClientDataType[]) {
@@ -21,6 +23,16 @@ class Client extends VuexModule implements ClientState {
   public async getClient(e: string) {
       const data = await getClientApi(e);
       this.GET_CLIENT(data);
+  }
+
+  @Mutation
+  private CHANGE_POSITION(e: number){
+    this.Position=e;
+  }
+
+  @Action
+  public changePosition(e: number){
+      this.CHANGE_POSITION(e);
   }
 
 }

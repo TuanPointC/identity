@@ -52,4 +52,8 @@ export default {
     height: 40px;
     width: 40px;
 }
+.el-tabs__header, .is-top {
+    display: none!important;
+}
+
 </style>

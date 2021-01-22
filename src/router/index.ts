@@ -21,6 +21,8 @@ import {BreakCrumbModule} from '../store/modules/breakCrumb'
 
 import TitleClient from '../views/client/title.vue'
 import ClientHome from '../views/client/home.vue'
+import DetailsClient from '../views/client/detail.vue'
+import SecretsClient from '../views/client/secret.vue'
 
 Vue.use(VueRouter)
 
@@ -40,7 +42,6 @@ const routes: Array<RouteConfig> = [
       {
         path: 'details',
         component: DetailsUser,
-        props: 'details',
       },
       {
         path: 'roles',
@@ -99,6 +100,14 @@ const routes: Array<RouteConfig> = [
       {
         path: '/',
         component: ClientHome
+      },
+      {
+        path: 'details',
+        component: DetailsClient,
+      },
+      {
+        path: 'secrets',
+        component: SecretsClient,
       },
     ]
   }

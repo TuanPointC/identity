@@ -116,7 +116,7 @@ export default {
   width: fit-content;
 }
 .el-transfer-panel {
-  width: 450px !important;
+  width: 350px !important;
 }
 .el-transfer-panel .el-transfer-panel__header {
   background: rgb(72, 61, 139) !important;

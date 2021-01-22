@@ -28,6 +28,15 @@
           width="70%"
           center
         >
+          <div
+            class="horizontal"
+            :style="{
+              width: width + '%',
+              background: 'red',
+              height: '3px',
+              margin: '-25px 0px 10px',
+            }"
+          ></div>
           <el-tabs v-model="activeName">
             <el-tab-pane name="1">
               <div class="firstStep">
@@ -95,17 +104,108 @@
                 </div>
               </div>
             </el-tab-pane>
-            <el-tab-pane name="2">Config</el-tab-pane>
-            <el-tab-pane name="3">Role</el-tab-pane>
-            <el-tab-pane name="4">Task</el-tab-pane>
+            <el-tab-pane name="2">
+              <h3>Enter a callback URL</h3>
+              <h5>
+                Tokens will be sent to this endpoint (you can configure more
+                after setup)
+              </h5>
+              <div class="input">
+                <div class="label">Callback URL</div>
+                <el-input
+                  placeholder="Please input"
+                  v-model="addClient.redirectUris[0]"
+                >
+                </el-input>
+              </div>
+            </el-tab-pane>
+            <el-tab-pane name="3">
+              <h3>Enter a post-logout URL</h3>
+              <h5>Optional (you can configure more after setup)</h5>
+              <div class="input">
+                <div class="label">Logout URL</div>
+                <el-input
+                  placeholder="Please input"
+                  v-model="addClient.postLogoutRedirectUris[0]"
+                >
+                </el-input>
+              </div>
+            </el-tab-pane>
+            <el-tab-pane name="4">
+              <h4>Select identity Resources this client can access</h4>
+              <el-transfer
+                v-model="valueIdentity"
+                :data="dataIdentity"
+                :titles="['Available', 'Assigned']"
+                style="width: 100%"
+              >
+              </el-transfer>
+            </el-tab-pane>
+            <el-tab-pane name="5">
+              <el-transfer
+                v-model="valueProtect"
+                :data="dataProtect"
+                :titles="['Available', 'Assigned']"
+                style="width: 100%"
+              >
+              </el-transfer>
+            </el-tab-pane>
+            <el-tab-pane name="6">
+              <div class="sixthStep">
+                <table style="width: 100%">
+                  <tr>
+                    <td class="columnFirst">Client Id</td>
+                    <td>{{ addClient.clientId }}</td>
+                  </tr>
+                  <tr>
+                    <td class="columnFirst">Display Name</td>
+                    <td>{{ addClient.clientName }}</td>
+                  </tr>
+                  <tr>
+                    <td class="columnFirst">Display URL</td>
+                    <td>{{ addClient.clientUri }}</td>
+                  </tr>
+                  <tr>
+                    <td class="columnFirst">Description</td>
+                    <td>{{ addClient.description }}</td>
+                  </tr>
+                  <tr>
+                    <td class="columnFirst">Logo URL</td>
+                    <td>{{ addClient.logoUri }}</td>
+                  </tr>
+                  <tr>
+                    <td class="columnFirst">Require Consent</td>
+                    <td>{{ addClient.requireConsent }}</td>
+                  </tr>
+                  <tr>
+                    <td class="columnFirst">Callback URL</td>
+                    <td>{{ addClient.redirectUris[0] }}</td>
+                  </tr>
+                  <tr>
+                    <td class="columnFirst">Logout URL</td>
+                    <td>{{ addClient.postLogoutRedirectUris[0] }}</td>
+                  </tr>
+                  <tr>
+                    <td class="columnFirst">Identity Resourse</td>
+                    <td>
+                      {{ valueIdentity.map((e) => dataIdentity[e].label) }}
+                    </td>
+                  </tr>
+                  <tr>
+                    <td class="columnFirst">Protect Resourse</td>
+                    <td>
+                      {{ valueProtect.map((e) => dataProtect[e].label) }}
+                    </td>
+                  </tr>
+                </table>
+              </div>
+            </el-tab-pane>
           </el-tabs>
-          <span
-            slot="footer"
-            class="dialog-footer"
-            style="display: flex; justify-content: space-between"
-          >
-            <el-button type="success" @click="open2(), next()">Save</el-button>
-            <el-button @click="dialogVisible = false">Cancel</el-button>
+          <span slot="footer" class="dialog-footer">
+            <el-button type="success" @click="next(1), addClientClient()">{{
+              button
+            }}</el-button>
+            <el-button type="info" @click="next(-1)">Back</el-button>
           </span>
         </el-dialog>
       </div>
@@ -133,7 +233,10 @@
           </el-table-column>
           <el-table-column width="150">
             <template style="display: flex" slot-scope="scope">
-              <el-button circle v-if="!scope.row.nonEditable"
+              <el-button
+                circle
+                v-if="!scope.row.nonEditable"
+                @click="editFunc(scope)"
                 ><i class="fas fa-pencil-alt"></i
               ></el-button>
             </template>
@@ -153,25 +256,31 @@
 import { ClientModule } from "@/store/modules/client";
 import { addClientApi } from "@/api/client";
 import { uid } from "uid";
+import {
+  getIdentityResources,
+  getProtectResources,
+} from "@/api/identityResources";
 export default {
   data() {
     return {
+      button: "Next",
+      width: 16.6667,
       value: "",
       dialogVisible: false,
       input: "",
       activeName: "1",
       addClient: {
-        clientType: "",
+        clientType: "BrowserBased",
         clientId: "",
         clientName: "",
         clientUri: "",
         logoUri: "",
         description: "",
         requireConsent: false,
-        redirectUris: [],
-        postLogoutRedirectUris: [],
+        redirectUris: [""],
+        postLogoutRedirectUris: [""],
         allowedScopes: [],
-        allowedCorsOrigins: [],
+        allowedCorsOrigins: ["http://localhost:5000"],
         clientSecrets: [
           {
             type: "",
@@ -181,6 +290,10 @@ export default {
           },
         ],
       },
+      dataIdentity: [],
+      valueIdentity: [],
+      dataProtect: [],
+      valueProtect: [],
     };
   },
   methods: {
@@ -190,15 +303,51 @@ export default {
         type: "success",
       });
     },
-    next() {
-      this.activeName =(parseInt(this.activeName)+1).toString();
-     
+    next(e) {
+      if (e > 0) {
+        if (parseInt(this.activeName) < 7) {
+          this.activeName = (parseInt(this.activeName) + 1).toString();
+          this.width += 16.666667;
+          if (this.activeName == "6") this.button = "Save";
+          else this.button = "Next";
+        }
+      } else {
+        if (parseInt(this.activeName) > 1) {
+          this.activeName = (parseInt(this.activeName) - 1).toString();
+          this.width -= 16.6667;
+          this.button = "Next";
+        }
+      }
     },
     GenerationId() {
       this.addClient.clientId = uid(25);
     },
-    addClientClient() {
-      addClientApi(this.addClient);
+    async addClientClient() {
+      if (this.activeName == "7") {
+        for (let i = 0; i < this.valueIdentity.length; i++) {
+          this.addClient.allowedScopes.push(
+            this.dataIdentity[this.valueIdentity[i]].label
+          );
+        }
+        for (let i = 0; i < this.valueProtect.length; i++) {
+          if (
+            this.addClient.allowedScopes.indexOf(
+              this.dataProtect[this.valueProtect[i]].label
+            ) == -1
+          ) {
+            this.addClient.allowedScopes.push(
+              this.dataProtect[this.valueProtect[i]].label
+            );
+          }
+        }
+        await addClientApi(this.addClient);
+        await setTimeout(await ClientModule.getClient(""), 1000);
+        this.dialogVisible = false;
+      }
+    },
+    async editFunc(e) {
+      await ClientModule.changePosition(e.$index);
+      this.$router.push("/Clients/details");
     },
   },
   computed: {
@@ -208,11 +357,45 @@ export default {
   },
   async mounted() {
     await ClientModule.getClient("");
+    const data2 = await getProtectResources("");
+    const data1 = await getIdentityResources("");
+    for (let i = 0; i < data1.length; i++) {
+      this.dataIdentity.push({
+        key: i,
+        label: data1[i].name,
+      });
+    }
+    for (let i = 0; i < data2.length; i++) {
+      this.dataProtect.push({
+        key: i,
+        label: data1[i].name,
+      });
+    }
   },
 };
 </script>
 
 <style lang='scss' scoped>
+td.columnFirst {
+  width: 26%;
+  color: gray;
+  font-weight: bold;
+}
+table,
+tr {
+  border: 1px solid rgba(114, 111, 111, 0.048);
+  border-collapse: collapse;
+}
+td {
+  padding: 15px;
+  text-align: left;
+}
+tr {
+  cursor: pointer;
+  &:hover {
+    background: rgba(228, 227, 227, 0.432);
+  }
+}
 .search {
   margin: 20px 0;
 }
@@ -249,7 +432,12 @@ export default {
     }
   }
 }
-
+.el-transfer {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
 .tableUser {
   button {
     display: block;
