@@ -67,6 +67,30 @@ export const editScopes = (data: {
     axios({
         method: 'put',
         url: URL + '/' + ProtectedModule.GetProtected[ProtectedModule.Position].id + '/scopes/' + data.id,
-        data: data  
+        data: data
+    })
+}
+
+export const addProtectedResourcesScopesApi = (data: {
+    id: number;
+    name: string;
+    displayName: string;
+    description: string;
+    required: boolean;
+    emphasize: boolean;
+    showInDiscoveryDocument: boolean;
+    userClaims: string[];
+}) => {
+    axios({
+        method: 'post',
+        url: URL + '/' + ProtectedModule.GetProtected[ProtectedModule.Position].id + '/scopes',
+        data: data
+    })
+}
+
+export const deleteScopes = (id: string) => {
+    axios({
+        method: 'delete',
+        url: URL + '/' + ProtectedModule.GetProtected[ProtectedModule.Position].id + '/scopes/' + id,
     })
 }

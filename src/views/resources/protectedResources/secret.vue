@@ -33,7 +33,9 @@
           v-model="addClientSecretClient.value"
         >
         </el-input>
-        <el-button type="info" @click="randomValue"><i class="fas fa-random"></i></el-button>
+        <el-button type="info" @click="randomValue"
+          ><i class="fas fa-random"></i
+        ></el-button>
       </div>
       <hr />
       <div class="input">
@@ -101,7 +103,10 @@
 import MenuProtected from "@/views/resources/protectedResources/menu";
 import { ProtectedModule } from "@/store/modules/resources/protected";
 import { uid } from "uid";
-import { addProtectedResourcesSecretsApi,deleteProtectedSecret } from "@/api/protectedResorces";
+import {
+  addProtectedResourcesSecretsApi,
+  deleteProtectedSecret,
+} from "@/api/protectedResorces";
 export default {
   components: {
     MenuProtected,
@@ -144,13 +149,13 @@ export default {
     async addSecrets() {
       if (this.expiration == false) this.addClientSecretClient.expiration = "";
       await addProtectedResourcesSecretsApi(this.addClientSecretClient);
-      setTimeout(ProtectedModule.getProtected(), 1000);
+      setTimeout(ProtectedModule.getProtected, 500);
     },
 
-    async deleteSecret(e){
+    async deleteSecret(e) {
       await deleteProtectedSecret(e.row.id);
-      setTimeout(ProtectedModule.getProtected(), 1000);
-    }
+      setTimeout(ProtectedModule.getProtected, 500);
+    },
   },
 };
 </script>

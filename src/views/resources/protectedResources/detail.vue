@@ -67,7 +67,7 @@
 <script>
 import MenuProtected from "@/views/resources/protectedResources/menu";
 import { ProtectedModule } from "@/store/modules/resources/protected";
-import { editIdentityResourceApi } from "@/api/protectedResorces";
+import { editProtectedResourceApi } from "@/api/protectedResorces";
 export default {
   components: {
     MenuProtected,
@@ -91,7 +91,7 @@ export default {
       });
     },
     async save() {
-      await editIdentityResourceApi(this.detailsProtected);
+      await editProtectedResourceApi(this.detailsProtected);
       await setTimeout(ProtectedModule.getProtected(), 1000);
       await setTimeout(this.$router.push("/ProtectResources"), 1000);
     },

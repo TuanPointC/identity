@@ -3,7 +3,17 @@
     <MenuProtected />
     <div class="container">
       <div class="addRoles">
-        <el-button type="success">Add Resources</el-button>
+        <el-button type="success" @click="dialogVisible = true"
+          >Add Scope</el-button
+        >
+        <el-dialog
+          title="New Identity Resource"
+          :visible.sync="dialogVisible"
+          width="70%"
+          center
+        >
+          <addScopeTemplate v-on:saveClick="saveAddScope" />
+        </el-dialog>
       </div>
       <div class="scopesTable">
         <el-collapse v-model="activeNames" accordion>
@@ -101,7 +111,11 @@
                 <el-button type="success" @click="saveEditScope(item), open2()"
                   >Save</el-button
                 >
-                <el-button type="danger" @click="centerDialogVisible1 = true"
+                <el-button
+                  type="danger"
+                  @click="
+                    (centerDialogVisible1 = true), deleteScopesFunc(item.id)
+                  "
                   >Delete</el-button
                 >
               </div>
@@ -112,7 +126,7 @@
                 v-model="value[index]"
                 :data="data"
                 :titles="['Available', 'Assigned']"
-                @change="open2(), saveTransfer()"
+                @change="open2(), saveTransfer(index)"
               >
               </el-transfer>
             </div>
@@ -131,20 +145,25 @@
 <script>
 import MenuProtected from "@/views/resources/protectedResources/menu";
 import { ProtectedModule } from "@/store/modules/resources/protected";
-import { editScopes } from "@/api/protectedResorces";
+import { editScopes, deleteScopes } from "@/api/protectedResorces";
 import { ClaimsModule } from "@/store/modules/claim";
+import addScopeTemplate from "./addScope.vue";
 
 export default {
   components: {
     MenuProtected,
+    addScopeTemplate,
   },
   data() {
     return {
+      dialogVisible: false,
       activeNames: [],
       radio1: "Details",
       scope: [],
       value: [],
       data: [],
+      valueChild: [],
+      dataChild: [],
     };
   },
   computed: {
@@ -157,7 +176,6 @@ export default {
     cliamsData() {
       return ClaimsModule.GetClaims;
     },
-    
   },
   methods: {
     rowClick(row) {
@@ -165,7 +183,6 @@ export default {
     },
     async saveEditScope(e) {
       await editScopes(e);
-      setTimeout(ProtectedModule.getProtected(), 1000);
     },
     open2() {
       this.$message({
@@ -173,23 +190,45 @@ export default {
         type: "success",
       });
     },
-    saveTransfer(e){
-     this.scope[e].userClaims=this.value[e]
-    }
+    saveTransfer(e) {
+      this.scope[e].userClaims = [];
+      this.value[e].map((k) => {
+        this.scope[e].userClaims.push(this.data[k].label);
+      });
+      editScopes(this.scope[e]);
+      setTimeout(ProtectedModule.getProtected, 500);
+    },
+    async deleteScopesFunc(e) {
+      deleteScopes(e);
+      setTimeout(ProtectedModule.getProtected, 500);
+      setTimeout(() => {
+        this.scope = this.protectedData[this.position].scopes;
+      }, 800);
+      this.activeNames = [];
+      this.open2();
+    },
+
+    saveAddScope() {
+      this.dialogVisible = false;
+      setTimeout(ProtectedModule.getProtected, 500);
+      setTimeout(() => {
+        this.scope = this.protectedData[this.position].scopes;
+      }, 800);
+      this.activeNames = [];
+      this.open2();
+    },
   },
-  mounted() {
+  async mounted() {
     ProtectedModule.getProtected();
     this.scope = this.protectedData[this.position].scopes;
-    ClaimsModule.getClaims();
+    await ClaimsModule.getClaims();
     for (let i = 0; i < this.cliamsData.length; i++) {
       this.data.push({
         key: i,
         label: this.cliamsData[i].name,
       });
     }
-    const v = this.data.map((e) => 
-      e.label
-    );
+    const v = this.data.map((e) => e.label);
     const t = [];
     for (let i = 0; i < this.scope.length; i++) {
       for (let j = 0; j < this.scope[i].userClaims.length; j++) {
