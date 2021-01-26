@@ -9,11 +9,9 @@ export class getIdentityResourcesDataType {
     showInDiscoveryDocument!: boolean;
     allowedClaims!: string[];
     nonEditable!: boolean;
-
 }
 
-
-export class getProtectResourcesDataType {
+export class getProtectedResourcesDataType {
     id!: string;
     name!: string;
     displayName!: string;
@@ -39,4 +37,17 @@ export class getProtectResourcesDataType {
     allowedClaims!: string[];
     created!: string;
     nonEditable!: boolean;
+}
+
+export class addProtectedResurcesDataType {
+    name!: string;
+    displayName!: string;
+    description!: string;
+    allowedClaims!: string[];
+    resourceSecrets!: {
+        type: string,
+        value: string,
+        description: string,
+        expiration: string
+    }[]
 }

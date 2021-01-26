@@ -2,7 +2,6 @@
   <div class="menu-box">
     <div class="container">
       <el-menu
-        :default-active="activeIndex2"
         class="el-menu-demo"
         mode="horizontal"
         @select="handleSelect"
@@ -22,12 +21,23 @@
         <el-menu-item index="/Clients"
           ><router-link to="/Clients">Clients </router-link></el-menu-item
         >
-        <el-submenu index="/Resources">
+        <el-submenu >
           <template slot="title"
-            ><router-link to="/Resources">Resources </router-link></template
+            ><router-link
+              to="/IdentityResources"
+              >Resources
+            </router-link></template
           >
-          <el-menu-item index="5-1">item one</el-menu-item>
-          <el-menu-item index="5-2">item two</el-menu-item>
+          <el-menu-item
+            @click="changeRouter('IdentityResources')"
+            :style="{ color: color1 }"
+            >Identity Resources
+          </el-menu-item>
+          <el-menu-item
+            @click="changeRouter('ProtectResources')"
+            :style="{ color: color2 }"
+            >Protect Resources</el-menu-item
+          >
         </el-submenu>
         <el-menu-item index="/Auditing"
           ><router-link to="/Auditing">Auditing </router-link></el-menu-item
@@ -44,13 +54,24 @@
 export default {
   data() {
     return {
-      activeIndex: "1",
-      activeIndex2: "1",
+      color1: "#aeaeae",
+      color2: "#aeaeae",
+      //size:3
     };
   },
   methods: {
     handleSelect(key, keyPath) {
       console.log(key, keyPath);
+    },
+    changeRouter(e) {
+      this.$router.push("/" + e);
+      if (e == "IdentityResources") {
+        this.color1 = "white";
+        this.color2 = "#aeaeae";
+      } else {
+        this.color2 = "white";
+        this.color1 = "#aeaeae";
+      }
     },
   },
 };
@@ -59,26 +80,27 @@ export default {
 <style lang="scss" scoped>
 a {
   text-decoration: none;
-  color: #aeaeae!important;
+  color: #aeaeae !important;
   display: inline-block;
   height: 60px;
   padding: 0 20px;
   font-size: 17px;
 }
-a.router-link-exact-active,a.router-link-active{
-    color: white!important;
-    border-bottom: 3px solid orangered;
+a.router-link-exact-active,
+a.router-link-active {
+  color: white !important;
+  border-bottom: 3px solid orangered;
 }
 a[data-v-a380d422] {
-    height: 58px;
+  height: 58px;
 }
 li {
   font-weight: 600;
   padding: 0;
 }
 li.is-active {
-  border-bottom-color:none!important;
-  border-bottom-width:0!important;
+  border-bottom-color: none !important;
+  border-bottom-width: 0 !important;
 }
 .menu-box {
   background: #483d8b;

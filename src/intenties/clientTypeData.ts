@@ -4,7 +4,13 @@ export class ClientDataType {
     clientId!: string;
     description!: string;
     protocolType!: string;
-    clientSecrets!: [];
+    clientSecrets!: {
+        id: number,
+        type: string,
+        value: string,
+        description: string,
+        expiration: string
+    }[];
     requireClientSecret!: false;
     clientName!: string;
     clientUri!: string;
@@ -32,9 +38,12 @@ export class ClientDataType {
     refreshTokenExpiration!: string;
     accessTokenType!: string;
     enableLocalLogin!: true;
-    identityProviderRestrictions!: [];
+    identityProviderRestrictions!: string[];
     includeJwtId!: false;
-    claims!: [];
+    claims!: {
+        type: string,
+        value: string
+    }[];
     alwaysSendClientClaims!: false;
     clientClaimsPrefix!: string;
     allowedCorsOrigins!: string[];

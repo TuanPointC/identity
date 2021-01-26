@@ -17,12 +17,24 @@ import TitleClaim from '../views/claim/title.vue'
 import ClaimHome from '../views/claim/home.vue'
 import DetailsClaims from '../views/claim/details.vue'
 
-import {BreakCrumbModule} from '../store/modules/breakCrumb'
+import { BreakCrumbModule } from '../store/modules/breakCrumb'
 
 import TitleClient from '../views/client/title.vue'
 import ClientHome from '../views/client/home.vue'
 import DetailsClient from '../views/client/detail.vue'
 import SecretsClient from '../views/client/secret.vue'
+
+import IdentityResourcesHome from '../views/resources/identityResources/home.vue'
+import TitleIdentityResources from '../views/resources/identityResources/title.vue'
+import DetailsIdentity from '../views/resources/identityResources/detail.vue'
+import ClaimsIdentity from '../views/resources/identityResources/claims.vue'
+
+import ProtectResourcesHome from '../views/resources/protectedResources/home.vue'
+import TitleProtectResources from '../views/resources/protectedResources/title.vue'
+import DetailsProtected from '../views/resources/protectedResources/detail.vue'
+import ClaimsProtected from '../views/resources/protectedResources/claims.vue'
+import ScopesProtected from '../views/resources/protectedResources/scopes.vue'
+import SecretsProtected from '../views/resources/protectedResources/secret.vue'
 
 Vue.use(VueRouter)
 
@@ -75,7 +87,6 @@ const routes: Array<RouteConfig> = [
         path: 'users',
         component: UsersRoles
       },
-
     ]
   },
 
@@ -110,6 +121,50 @@ const routes: Array<RouteConfig> = [
         component: SecretsClient,
       },
     ]
+  },
+  {
+    path: '/IdentityResources',
+    component: TitleIdentityResources,
+    children: [
+      {
+        path: '/',
+        component: IdentityResourcesHome
+      },
+      {
+        path: 'details',
+        component: DetailsIdentity,
+      },
+      {
+        path: 'claims',
+        component: ClaimsIdentity,
+      },
+    ]
+  },
+  {
+    path: '/ProtectResources',
+    component: TitleProtectResources,
+    children: [
+      {
+        path: '/',
+        component: ProtectResourcesHome
+      },
+      {
+        path: 'details',
+        component: DetailsProtected,
+      },
+      {
+        path: 'claims',
+        component: ClaimsProtected,
+      },
+      {
+        path: 'scopes',
+        component: ScopesProtected,
+      },
+      {
+        path: 'secrets',
+        component: SecretsProtected,
+      },
+    ]
   }
 
 ]
@@ -121,10 +176,10 @@ const router = new VueRouter({
 })
 
 router.afterEach((to) => {
-  if(to.fullPath.split('/').length>2){
-    BreakCrumbModule.changeRouter( to.fullPath.split('/')[2]);
+  if (to.fullPath.split('/').length > 2) {
+    BreakCrumbModule.changeRouter(to.fullPath.split('/')[2]);
   }
-  else{
+  else {
     BreakCrumbModule.changeRouter('');
   }
 })

@@ -1,23 +1,28 @@
 <template>
   <div>
-    <MenuClient />
+    <MenuProtected />
     <div class="container">
-      <div class="active" style="display: flex">
-        <span style="margin-right: 60px">Require Secret</span>
+      <div class="active" style="display: flex; align-items: center">
+        <span style="margin-right: 40px">Expiration Date</span>
         <div class="switch-box">
           <label class="switch switch-green">
-            <input
-              type="checkbox"
-              class="switch-input"
-              :checked="ClientData[Position].requireClientSecret"
-            />
+            <input type="checkbox" class="switch-input" v-model="expiration" />
             <span class="switch-label" data-on="On" data-off="Off"></span>
             <span class="switch-handle"></span>
           </label>
         </div>
+        <el-date-picker
+          style="margin-left: 20px"
+          v-if="expiration"
+          v-model="addClientSecretClient.expiration"
+          type="datetime"
+          placeholder="Select date and time"
+          @change="getDate"
+        >
+        </el-date-picker>
       </div>
       <div class="input">
-        <span> Type</span>
+        <div class="label">Type</div>
         <el-input v-model="addClientSecretClient.type"></el-input>
       </div>
       <hr />
@@ -28,11 +33,11 @@
           v-model="addClientSecretClient.value"
         >
         </el-input>
-        <el-button type="info"><i class="fas fa-random"></i></el-button>
+        <el-button type="info" @click="randomValue"><i class="fas fa-random"></i></el-button>
       </div>
       <hr />
       <div class="input">
-        <span>Description</span>
+        <div class="label">Description</div>
         <el-input
           type="textarea"
           :autosize="{ minRows: 5 }"
@@ -42,11 +47,7 @@
       <hr />
       <div class="buttonFunction">
         <div class="group1">
-          <el-button
-            type="success"
-            @click="
-              open2(), addClientSecretFunc()
-            "
+          <el-button type="success" @click="open2(), addSecrets()"
             >Add</el-button
           >
           <el-button type="info">Clear</el-button>
@@ -76,10 +77,7 @@
         </div>
       </div>
       <div class="secretTable" style="margin-top: 20px">
-        <el-table
-          :data="ClientData[Position].clientSecrets"
-          style="width: 100%"
-        >
+        <el-table style="width: 100%" :data="ProtectedData[position].secrets">
           <el-table-column prop="type" label="Type"> </el-table-column>
           <el-table-column prop="value" label="Value"> </el-table-column>
           <el-table-column prop="description" label="Description">
@@ -88,7 +86,7 @@
           </el-table-column>
           <el-table-column width="100">
             <template slot-scope="scope">
-              <el-button circle @click="deleteClientSecretApi(scope)">
+              <el-button circle @click="deleteSecret(scope)">
                 <i class="fas fa-times" style="color: red"></i
               ></el-button>
             </template>
@@ -100,25 +98,21 @@
 </template>
 
 <script>
-import MenuClient from "@/views/client/menu";
-import { ClientModule } from "@/store/modules/client";
-import {
-  deleteClientApi,
-  addClientApiSecret,
-  deleteClientSecretApi,
-} from "@/api/client";
-import { uid } from 'uid';
+import MenuProtected from "@/views/resources/protectedResources/menu";
+import { ProtectedModule } from "@/store/modules/resources/protected";
+import { uid } from "uid";
+import { addProtectedResourcesSecretsApi,deleteProtectedSecret } from "@/api/protectedResorces";
 export default {
   components: {
-    MenuClient,
+    MenuProtected,
   },
   data() {
     return {
+      expiration: false,
       centerDialogVisible1: false,
       centerDialogVisible: false,
       changed: false,
       active: true,
-
       addClientSecretClient: {
         type: "",
         value: "",
@@ -128,11 +122,11 @@ export default {
     };
   },
   computed: {
-    ClientData() {
-      return ClientModule.GetClient;
+    ProtectedData() {
+      return ProtectedModule.GetProtected;
     },
-    Position() {
-      return ClientModule.Position;
+    position() {
+      return ProtectedModule.Position;
     },
   },
   methods: {
@@ -142,27 +136,21 @@ export default {
         type: "success",
       });
     },
-    async deleteFunc() {
-      await deleteClientApi();
-      await setTimeout(await ClientModule.getClient(""), 3000);
-      this.$router.push("/Clients");
+
+    randomValue() {
+      this.addClientSecretClient.value = uid(25);
     },
 
-    randomValue(){
-      this.addClientSecretClient.value=uid(25);
+    async addSecrets() {
+      if (this.expiration == false) this.addClientSecretClient.expiration = "";
+      await addProtectedResourcesSecretsApi(this.addClientSecretClient);
+      setTimeout(ProtectedModule.getProtected(), 1000);
     },
 
-    async addClientSecretFunc() {
-      this.addClientSecretClient.expiration = new Date();
-      this.addClientSecretClient.expiration = this.addClientSecretClient.expiration.toISOString();
-      await addClientApiSecret(this.addClientSecretClient);
-      setTimeout(ClientModule.getClient(""), 3000);
-    },
-
-    async deleteClientSecretApi(e) {
-      await deleteClientSecretApi(e.$index);
-      setTimeout(ClientModule.getClient(""), 3000);
-    },
+    async deleteSecret(e){
+      await deleteProtectedSecret(e.row.id);
+      setTimeout(ProtectedModule.getProtected(), 1000);
+    }
   },
 };
 </script>
@@ -184,15 +172,18 @@ hr {
 .input {
   display: flex;
   align-items: center;
-  justify-content: space-between;
   margin: 20px 0;
   position: relative;
+  width: 100%;
+  .label {
+    width: 20%;
+  }
   .el-input {
-    width: 90%;
+    width: 80%;
     display: block;
   }
   .el-textarea {
-    width: 90%;
+    width: 80%;
     display: block;
   }
   button {

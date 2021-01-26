@@ -256,10 +256,8 @@
 import { ClientModule } from "@/store/modules/client";
 import { addClientApi } from "@/api/client";
 import { uid } from "uid";
-import {
-  getIdentityResources,
-  getProtectResources,
-} from "@/api/identityResources";
+import { getIdentityResources } from "@/api/identityResources";
+import { getProtectedResources } from "@/api/protectedResorces";
 export default {
   data() {
     return {
@@ -357,7 +355,7 @@ export default {
   },
   async mounted() {
     await ClientModule.getClient("");
-    const data2 = await getProtectResources("");
+    const data2 = await getProtectedResources("");
     const data1 = await getIdentityResources("");
     for (let i = 0; i < data1.length; i++) {
       this.dataIdentity.push({
