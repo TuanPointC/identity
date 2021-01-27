@@ -6,7 +6,6 @@
           :default-active="activeIndex2"
           class="el-menu-demo"
           mode="horizontal"
-          @select="handleSelect"
           background-color="#ecf0f1"
           text-color="black"
         >
@@ -16,50 +15,27 @@
             ></el-menu-item
           >
           <el-menu-item index="2"
-            ><router-link to="/Users/roles"
-              >Roles
-            </router-link></el-menu-item
+            ><router-link to="/Users/roles">Roles </router-link></el-menu-item
           >
           <el-menu-item index="3">
             <router-link to="/Users/claims"
               >Additional Details
             </router-link></el-menu-item
           >
-          <el-menu-item index="4"
-            ><router-link to="/Users/application"
-              >Application
-            </router-link></el-menu-item
-          >
-          <el-menu-item index="5"
-            ><router-link to="/Users/logins"
-              >Extenal Logins
-            </router-link></el-menu-item
-          >
-          <el-menu-item index="6"
-            ><router-link to="/Users/audits"
-              >Audits
-            </router-link></el-menu-item
-          >
         </el-menu>
       </div>
     </div>
-    <router-view/>
+    <router-view />
   </div>
 </template>
 
 <script>
-
 export default {
   data() {
     return {
       activeIndex: "1",
       activeIndex2: "1",
     };
-  },
-  methods: {
-    handleSelect(key, keyPath) {
-      console.log(key, keyPath);
-    },
   },
 };
 </script>
@@ -76,7 +52,7 @@ a {
 a.router-link-exact-active,
 a.router-link-active {
   color: black !important;
-  border-bottom: 2px solid rgb(36, 7, 139);
+  border-bottom: 3px solid rgb(36, 7, 139);
 }
 li {
   font-weight: 600;
@@ -87,17 +63,17 @@ li.is-active {
   border-bottom-width: 0 !important;
 }
 .menu-box {
-  background:#ecf0f1;
+  background: #ecf0f1;
   height: fit-content;
 }
 .el-menu.el-menu--horizontal {
   border-bottom: none !important;
 }
 .el-menu--horizontal > .el-menu-item {
-    height: 26px;
-    line-height: 24px;
+  height: 26px;
+  line-height: 24px;
 }
 a[data-v-2ef96ef9] {
-    height: fit-content; 
+  height: fit-content;
 }
 </style>

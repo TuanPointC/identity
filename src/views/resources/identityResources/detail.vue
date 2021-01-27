@@ -80,7 +80,7 @@
         </div>
       </div>
       <div class="buttonFunction">
-        <el-button type="success" @click="saveEdit">Save</el-button>
+        <el-button type="success" @click="saveEdit(), open2()">Save</el-button>
         <el-button type="danger" @click="centerDialogVisible1 = true"
           >Delete</el-button
         >
@@ -90,10 +90,7 @@
           width="30%"
           center
         >
-          <span
-            >It should be noted that the content will not be aligned in center
-            by default</span
-          >
+          <span>Do you want to delete?</span>
           <span slot="footer" class="dialog-footer">
             <el-button @click="centerDialogVisible1 = false">Cancel</el-button>
             <el-button
@@ -142,17 +139,24 @@ export default {
       },
     };
   },
+  computed:{
+    position(){
+      return IdentityModule.Position;
+    }
+  },
 
   methods: {
     open2() {
       this.$message({
-        message: "Data has been saved successfully",
+        message: "Data has been changed successfully",
         type: "success",
+        showClose: "true",
       });
     },
     async saveEdit() {
       await editIdentityResourceApi(this.detailsidentity);
       setTimeout(IdentityModule.getIdentity(), 1000);
+      this.$router.push("/IdentityResources");
     },
     async deleteIdentityClient() {
       await deleteIdentityResourceApi();
@@ -161,7 +165,12 @@ export default {
     },
   },
   mounted() {
-    this.detailsidentity = IdentityModule.GetIdentity[IdentityModule.Position];
+    if (this.position < 0) {
+      this.$router.push("/IdentityResources");
+    }
+    else{
+      this.detailsidentity = IdentityModule.GetIdentity[IdentityModule.Position];
+    }
   },
 };
 </script>

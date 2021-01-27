@@ -5,7 +5,7 @@
       v-model="value"
       :data="data"
       :titles="['Available', 'Assigned']"
-      @change="open2(),save()"
+      @change="open2(), save()"
     >
     </el-transfer>
   </div>
@@ -15,7 +15,7 @@
 import MenuProtected from "@/views/resources/protectedResources/menu";
 import { ClaimsModule } from "@/store/modules/claim";
 import { ProtectedModule } from "@/store/modules/resources/protected";
-import {editProtectedResourceApi} from '@/api/protectedResorces'
+import { editProtectedResourceApi } from "@/api/protectedResorces";
 export default {
   components: {
     MenuProtected,
@@ -27,12 +27,17 @@ export default {
       detailsProtected: [],
     };
   },
-  computed: {},
+  computed: {
+    position(){
+      return ProtectedModule.Position;
+    }
+  },
   methods: {
     open2() {
       this.$message({
-        message: "Congrats, this is a success message.",
+        message: "Data has been changed successfully",
         type: "success",
+        showClose: "true",
       });
     },
     async save() {
@@ -45,27 +50,31 @@ export default {
     },
   },
   async mounted() {
-    await ClaimsModule.getClaims();
-    const assigned =
-      ProtectedModule.GetProtected[ProtectedModule.Position].allowedClaims;
-    const available = ClaimsModule.GetClaims;
-    for (let i = 0; i < available.length; i++) {
-      this.data.push({
-        key: i,
-        label: available[i].name,
-      });
+    if (this.position < 0) {
+      this.$router.push("/ProtectedResources");
+    } else {
+      await ClaimsModule.getClaims();
+      const assigned =
+        ProtectedModule.GetProtected[ProtectedModule.Position].allowedClaims;
+      const available = ClaimsModule.GetClaims;
+      for (let i = 0; i < available.length; i++) {
+        this.data.push({
+          key: i,
+          label: available[i].name,
+        });
+      }
+      for (let i = 0; i < assigned.length; i++) {
+        this.value.push(
+          this.data
+            .map((e) => {
+              return e.label;
+            })
+            .indexOf(assigned[i])
+        );
+      }
+      this.detailsProtected =
+        ProtectedModule.GetProtected[ProtectedModule.Position];
     }
-    for (let i = 0; i < assigned.length; i++) {
-      this.value.push(
-        this.data
-          .map((e) => {
-            return e.label;
-          })
-          .indexOf(assigned[i])
-      );
-    }
-    this.detailsProtected =
-      ProtectedModule.GetProtected[ProtectedModule.Position];
   },
 };
 </script>

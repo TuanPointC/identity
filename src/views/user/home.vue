@@ -95,18 +95,6 @@
               :disabled="!addUser.filFullInput"
               >Save</el-button
             >
-            <el-button
-              type="success"
-              @click="dialogVisible = false"
-              :disabled="!addUser.filFullInput"
-              >Save & Configure</el-button
-            >
-            <el-button
-              type="primary"
-              @click="dialogVisible = false"
-              :disabled="!addUser.filFullInput"
-              >Save & Add Another</el-button
-            >
             <el-button @click="(dialogVisible = false), resetAddUserData()"
               >Cancel</el-button
             >
@@ -146,8 +134,10 @@
           <el-table-column prop="email" label="Email Address">
           </el-table-column>
           <el-table-column>
-            <template slot-scope="scope" >
-              <el-button circle @click.native="editData(scope)"><i class="fas fa-pencil-alt"></i></el-button>
+            <template slot-scope="scope">
+              <el-button circle @click.native="editData(scope)"
+                ><i class="fas fa-pencil-alt"></i
+              ></el-button>
             </template>
           </el-table-column>
         </el-table>
@@ -319,10 +309,11 @@ export default {
     async addUserRequest() {
       await addUserApi();
       this.resetAddUserData();
+      setTimeout(UserModule.getuserapi, 500);
     },
     async editData(e) {
       await UserModule.changeEditPosition(e.$index);
-      this.$router.push('/Users/details');
+      this.$router.push("/Users/details");
     },
   },
 

@@ -53,7 +53,7 @@ a {
 a.router-link-exact-active,
 a.router-link-active {
   color: black !important;
-  border-bottom: 2px solid rgb(36, 7, 139);
+  border-bottom: 3px solid rgb(36, 7, 139);
 }
 a[data-v-4c83ca8b] {
   height: 25px;

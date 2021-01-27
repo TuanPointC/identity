@@ -36,7 +36,7 @@
       </div>
       <hr />
       <div class="buttonFunction">
-        <el-button type="success" @click="save()">Save</el-button>
+        <el-button type="success" @click="save(), open2()">Save</el-button>
         <el-button type="danger" @click="centerDialogVisible1 = true"
           >Delete</el-button
         >
@@ -54,7 +54,7 @@
             <el-button @click="centerDialogVisible1 = false">Cancel</el-button>
             <el-button
               type="danger"
-              @click="(centerDialogVisible1 = false), open2()"
+              @click="(centerDialogVisible1 = false), open2(), deleteFunc()"
               >Delete</el-button
             >
           </span>
@@ -67,7 +67,10 @@
 <script>
 import MenuProtected from "@/views/resources/protectedResources/menu";
 import { ProtectedModule } from "@/store/modules/resources/protected";
-import { editProtectedResourceApi } from "@/api/protectedResorces";
+import {
+  editProtectedResourceApi,
+  deleteProtectedResourceApi,
+} from "@/api/protectedResorces";
 export default {
   components: {
     MenuProtected,
@@ -82,23 +85,38 @@ export default {
       detailsProtected: [],
     };
   },
+  computed: {
+    position() {
+      return ProtectedModule.Position;
+    },
+  },
 
   methods: {
     open2() {
       this.$message({
-        message: "Data has been saved successfully",
+        message: "Data has been changed successfully",
         type: "success",
+        showClose: "true",
       });
     },
     async save() {
       await editProtectedResourceApi(this.detailsProtected);
-      await setTimeout(ProtectedModule.getProtected(), 1000);
+      await setTimeout(ProtectedModule.getProtected, 1000);
+      await setTimeout(this.$router.push("/ProtectResources"), 1000);
+    },
+    async deleteFunc() {
+      deleteProtectedResourceApi();
+      await setTimeout(ProtectedModule.getProtected, 1000);
       await setTimeout(this.$router.push("/ProtectResources"), 1000);
     },
   },
   mounted() {
-    this.detailsProtected =
-      ProtectedModule.GetProtected[ProtectedModule.Position];
+    if (this.position < 0) {
+      this.$router.push("/ProtectedResources");
+    } else {
+      this.detailsProtected =
+        ProtectedModule.GetProtected[ProtectedModule.Position];
+    }
   },
 };
 </script>

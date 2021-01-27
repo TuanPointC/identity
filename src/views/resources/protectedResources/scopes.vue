@@ -186,8 +186,9 @@ export default {
     },
     open2() {
       this.$message({
-        message: "Congrats, this is a success message.",
+        message: "Data has been changed successfully",
         type: "success",
+        showClose: "true",
       });
     },
     saveTransfer(e) {
@@ -219,22 +220,26 @@ export default {
     },
   },
   async mounted() {
-    ProtectedModule.getProtected();
-    this.scope = this.protectedData[this.position].scopes;
-    await ClaimsModule.getClaims();
-    for (let i = 0; i < this.cliamsData.length; i++) {
-      this.data.push({
-        key: i,
-        label: this.cliamsData[i].name,
-      });
-    }
-    const v = this.data.map((e) => e.label);
-    const t = [];
-    for (let i = 0; i < this.scope.length; i++) {
-      for (let j = 0; j < this.scope[i].userClaims.length; j++) {
-        t.push(v.indexOf(this.scope[i].userClaims[j]));
+    if (this.position < 0) {
+      this.$router.push("/ProtectedResources");
+    } else {
+      ProtectedModule.getProtected();
+      this.scope = this.protectedData[this.position].scopes;
+      await ClaimsModule.getClaims();
+      for (let i = 0; i < this.cliamsData.length; i++) {
+        this.data.push({
+          key: i,
+          label: this.cliamsData[i].name,
+        });
       }
-      this.value.push(t);
+      const v = this.data.map((e) => e.label);
+      const t = [];
+      for (let i = 0; i < this.scope.length; i++) {
+        for (let j = 0; j < this.scope[i].userClaims.length; j++) {
+          t.push(v.indexOf(this.scope[i].userClaims[j]));
+        }
+        this.value.push(t);
+      }
     }
   },
 };

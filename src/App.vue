@@ -80,4 +80,9 @@ i.el-collapse-item__arrow.el-icon-arrow-right {
 .el-collapse-item__wrap {
     padding: 20px!important;
 }
+button.el-button.el-button--default.is-circle {
+    display: block;
+    width: 40px;
+    height: 40px;
+}
 </style>

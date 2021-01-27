@@ -34,6 +34,28 @@ export const editProtectedResourceApi = (data: getProtectedResourcesDataType) =>
     })
 }
 
+export const deleteProtectedResourceApi = () => {
+    axios({
+        method: 'delete',
+        url: URL + '/' + ProtectedModule.GetProtected[ProtectedModule.Position].id,
+    })
+}
+
+export const addProtectedResourceApi = (data: {
+    name: string;
+    displayName: string;
+    description: string;
+    allowedClaims: string[];
+}) => {
+    axios({
+        method: 'post',
+        url: URL,
+        data:data
+    })
+}
+
+
+
 export const addProtectedResourcesSecretsApi = (data: {
     type: string;
     value: string;

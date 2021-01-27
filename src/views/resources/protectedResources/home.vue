@@ -15,67 +15,14 @@
           width="70%"
           center
         >
-          <div class="input">
-            <div class="label">Name</div>
-            <el-input placeholder="Please input"></el-input>
-          </div>
-          <div class="input">
-            <div class="label">Value Type</div>
-            <el-input placeholder="Please input"></el-input>
-          </div>
-          <div class="input">
-            <div class="label">Rule</div>
-            <el-input placeholder="Please input"></el-input>
-          </div>
-          <div class="input">
-            <div class="label">Rule Validation <br />Failure Description</div>
-            <el-input placeholder="Please input"></el-input>
-          </div>
-          <div class="input">
-            <div class="label">Descriptions</div>
-            <el-input
-              type="textarea"
-              :autosize="{ minRows: 5 }"
-              placeholder="Please input"
-            >
-            </el-input>
-          </div>
-          <div class="active" style="display: flex">
-            <span style="width: 13%; font-weight: bold">Required</span>
-            <div class="switch-box">
-              <label class="switch switch-green">
-                <input type="checkbox" class="switch-input" />
-                <span class="switch-label" data-on="On" data-off="Off"></span>
-                <span class="switch-handle"></span>
-              </label>
-            </div>
-          </div>
-          <div class="active" style="display: flex; margin-top: 20px">
-            <span style="width: 13%; font-weight: bold">User Editable</span>
-            <div class="switch-box">
-              <label class="switch switch-green">
-                <input type="checkbox" class="switch-input" />
-                <span class="switch-label" data-on="On" data-off="Off"></span>
-                <span class="switch-handle"></span>
-              </label>
-            </div>
-          </div>
-          <span
-            slot="footer"
-            class="dialog-footer"
-            style="display: flex; justify-content: space-between"
-          >
-            <el-button type="success" @click="(dialogVisible = false), open2()"
-              >Save</el-button
-            >
-            <el-button @click="dialogVisible = false">Cancel</el-button>
-          </span>
+          <AddProtected v-on:saveClick="saveAdd" />
         </el-dialog>
       </div>
 
       <div class="tableUser" style="margin-top: 20px">
         <el-table :data="protectedData" style="width: 100%" stripe>
-          <el-table-column prop="displayName" label="Name" sortable> </el-table-column>
+          <el-table-column prop="displayName" label="Name" sortable>
+          </el-table-column>
           <el-table-column prop="id" label="ID"> </el-table-column>
           <el-table-column prop="description" label="Description">
           </el-table-column>
@@ -96,7 +43,12 @@
           </el-table-column>
           <el-table-column width="70">
             <template style="display: flex" slot-scope="scope">
-              <el-button v-if="!scope.row.nonEditable" circle @click="edit(scope)"><i class="fas fa-pencil-alt"></i></el-button>
+              <el-button
+                v-if="!scope.row.nonEditable"
+                circle
+                @click="edit(scope)"
+                ><i class="fas fa-pencil-alt"></i
+              ></el-button>
             </template>
           </el-table-column>
         </el-table>
@@ -112,8 +64,11 @@
 
 <script>
 import { ProtectedModule } from "@/store/modules/resources/protected";
-
+import AddProtected from "../protectedResources/addProtected";
 export default {
+  components: {
+    AddProtected,
+  },
   data() {
     return {
       value: "",
@@ -130,14 +85,20 @@ export default {
   methods: {
     open2() {
       this.$message({
-        message: "Congrats, this is a success message.",
+        message: "Data has been changed successfully",
         type: "success",
+        showClose: "true",
       });
     },
-    edit(e){
-      this.$router.push('/ProtectResources/details');
+    edit(e) {
+      this.$router.push("/ProtectedResources/details");
       ProtectedModule.changePosition(e.$index);
-    }
+    },
+    saveAdd() {
+      this.dialogVisible = false;
+      setTimeout(ProtectedModule.getProtected, 500);
+      this.open2();
+    },
   },
   async mounted() {
     await ProtectedModule.getProtected();

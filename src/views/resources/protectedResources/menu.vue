@@ -18,22 +18,22 @@
           text-color="black"
         >
           <el-menu-item index="1"
-            ><router-link to="/ProtectResources/details"
+            ><router-link to="/ProtectedResources/details"
               >Details</router-link
             ></el-menu-item
           >
           <el-menu-item index="2"
-            ><router-link to="/ProtectResources/scopes"
+            ><router-link to="/ProtectedResources/scopes"
               >Scopes</router-link
             ></el-menu-item
           >
           <el-menu-item index="3"
-            ><router-link to="/ProtectResources/claims"
+            ><router-link to="/ProtectedResources/claims"
               >Claims
             </router-link></el-menu-item
           >
           <el-menu-item index="4"
-            ><router-link to="/ProtectResources/secrets"
+            ><router-link to="/ProtectedResources/secrets"
               >Secrets
             </router-link></el-menu-item
           >
@@ -72,7 +72,7 @@ a {
 a.router-link-exact-active,
 a.router-link-active {
   color: black !important;
-  border-bottom: 2px solid rgb(36, 7, 139);
+  border-bottom: 3px solid rgb(36, 7, 139);
 }
 li {
   font-weight: 600;

@@ -23,7 +23,10 @@
       </div>
       <div class="input">
         <div class="label">Type</div>
-        <el-input v-model="addClientSecretClient.type"></el-input>
+        <el-input
+          v-model="addClientSecretClient.type"
+          @keyup.native="checkAddSecret"
+        ></el-input>
       </div>
       <hr />
       <div class="input">
@@ -31,6 +34,7 @@
         <el-input
           placeholder="Please input"
           v-model="addClientSecretClient.value"
+          @keyup.native="checkAddSecret"
         >
         </el-input>
         <el-button type="info" @click="randomValue"
@@ -49,33 +53,13 @@
       <hr />
       <div class="buttonFunction">
         <div class="group1">
-          <el-button type="success" @click="open2(), addSecrets()"
+          <el-button
+            type="success"
+            @click="open2(), addSecrets()"
+            :disabled="checkFillFull"
             >Add</el-button
           >
-          <el-button type="info">Clear</el-button>
-          <el-dialog
-            title="Reset password"
-            :visible.sync="centerDialogVisible"
-            width="50%"
-            center
-          >
-            <div class="input">
-              <div class="label" style="width: 20%">New Password</div>
-              <el-input placeholder="Please input"></el-input>
-            </div>
-            <div class="input">
-              <div class="label" style="width: 20%">Repeat password</div>
-              <el-input placeholder="Please input"></el-input>
-            </div>
-            <span slot="footer" class="dialog-footer">
-              <el-button @click="centerDialogVisible = false">Cancel</el-button>
-              <el-button
-                type="success"
-                @click="(centerDialogVisible = false), open2()"
-                >Save</el-button
-              >
-            </span>
-          </el-dialog>
+          <el-button type="info" @click="clear">Clear</el-button>
         </div>
       </div>
       <div class="secretTable" style="margin-top: 20px">
@@ -86,7 +70,7 @@
           </el-table-column>
           <el-table-column prop="expiration" label="Expiration">
           </el-table-column>
-          <el-table-column width="100">
+          <el-table-column width="70">
             <template slot-scope="scope">
               <el-button circle @click="deleteSecret(scope)">
                 <i class="fas fa-times" style="color: red"></i
@@ -124,6 +108,7 @@ export default {
         description: "",
         expiration: "",
       },
+      checkFillFull: true,
     };
   },
   computed: {
@@ -137,11 +122,18 @@ export default {
   methods: {
     open2() {
       this.$message({
-        message: "Data has been saved successfully",
+        message: "Data has been changed successfully",
         type: "success",
+        showClose: "true",
       });
     },
 
+    clear() {
+      this.addClientSecretClient.type = "";
+      this.addClientSecretClient.value = "";
+      this.addClientSecretClient.description = "";
+      this.addClientSecretClient.expiration = "";
+    },
     randomValue() {
       this.addClientSecretClient.value = uid(25);
     },
@@ -152,10 +144,26 @@ export default {
       setTimeout(ProtectedModule.getProtected, 500);
     },
 
+    checkAddSecret() {
+      if (
+        this.addClientSecretClient.type != "" &&
+        this.addClientSecretClient.value != ""
+      ) {
+        this.checkFillFull = false;
+      } else {
+        this.checkFillFull = true;
+      }
+    },
+
     async deleteSecret(e) {
       await deleteProtectedSecret(e.row.id);
       setTimeout(ProtectedModule.getProtected, 500);
     },
+  },
+  mounted() {
+    if (this.position < 0) {
+      this.$router.push("/ProtectResources");
+    }
   },
 };
 </script>

@@ -11,7 +11,7 @@
       >
         <div class="button" style="display: flex; width: fit-content">
           <el-button type="success" @click="dialogVisible = true"
-            >Add Client</el-button
+            >Add Resource</el-button
           >
         </div>
 
@@ -155,8 +155,9 @@ export default {
   methods: {
     open2() {
       this.$message({
-        message: "Congrats, this is a success message.",
+        message: "Data has been changed successfully",
         type: "success",
+        showClose: "true",
       });
     },
     next(e) {
@@ -189,7 +190,12 @@ export default {
     async addIdentityClient() {
       this.dialogVisible = false;
       await addIdentityResourcesApi(this.addIdentity);
-      setTimeout(await IdentityModule.getIdentity(), 3000);
+      setTimeout(await IdentityModule.getIdentity, 500);
+      this.addIdentity.name = "";
+      this.addIdentity.displayName = "";
+      this.addIdentity.description = "";
+      this.addIdentity.allowedClaims = [];
+      this.activeName = "1";
     },
   },
   async mounted() {

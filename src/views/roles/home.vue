@@ -42,12 +42,6 @@
               >Save</el-button
             >
             <el-button
-              type="success"
-              @click="dialogVisible = false"
-              :disabled="disableButtonSaveAddRoles"
-              >Save & Configure</el-button
-            >
-            <el-button
               @click="
                 dialogVisible = false;
                 addRolesClient.name = '';
@@ -90,7 +84,7 @@
         </el-table>
       </div>
       <div class="changeCurrentPage">
-        <p style="font-size: 12px; color: #9b9797; margin-top:20px">
+        <p style="font-size: 12px; color: #9b9797; margin-top: 20px">
           {{ rolesData.length }} results(s) found
         </p>
       </div>
@@ -133,8 +127,7 @@ export default {
     },
     async addRolesClientFunc() {
       await RolesModule.addRoles(this.addRolesClient);
-      setInterval(RolesModule.getRolesApi(), 500);
-      this.$forceUpdate();
+      setTimeout(RolesModule.getRolesApi, 500);
       this.addRolesClient.name = "";
       this.addRolesClient.description = "";
     },

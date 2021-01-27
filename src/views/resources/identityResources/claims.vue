@@ -27,12 +27,17 @@ export default {
       detailsidentity: [],
     };
   },
-  computed: {},
+  computed: {
+    position(){
+      return IdentityModule.Position;
+    }
+  },
   methods: {
     open2() {
       this.$message({
-        message: "Congrats, this is a success message.",
+        message: "Data has been changed successfully",
         type: "success",
+        showClose: "true",
       });
     },
     async save() {
@@ -45,26 +50,31 @@ export default {
     },
   },
   async mounted() {
-    await ClaimsModule.getClaims();
-    const assigned =
-      IdentityModule.GetIdentity[IdentityModule.Position].allowedClaims;
-    const available = ClaimsModule.GetClaims;
-    for (let i = 0; i < available.length; i++) {
-      this.data.push({
-        key: i,
-        label: available[i].name,
-      });
+    if (this.position < 0) {
+      this.$router.push("/IdentityResources");
+    } else {
+      await ClaimsModule.getClaims();
+      const assigned =
+        IdentityModule.GetIdentity[IdentityModule.Position].allowedClaims;
+      const available = ClaimsModule.GetClaims;
+      for (let i = 0; i < available.length; i++) {
+        this.data.push({
+          key: i,
+          label: available[i].name,
+        });
+      }
+      for (let i = 0; i < assigned.length; i++) {
+        this.value.push(
+          this.data
+            .map((e) => {
+              return e.label;
+            })
+            .indexOf(assigned[i])
+        );
+      }
+      this.detailsidentity =
+        IdentityModule.GetIdentity[IdentityModule.Position];
     }
-    for (let i = 0; i < assigned.length; i++) {
-      this.value.push(
-        this.data
-          .map((e) => {
-            return e.label;
-          })
-          .indexOf(assigned[i])
-      );
-    }
-    this.detailsidentity = IdentityModule.GetIdentity[IdentityModule.Position];
   },
 };
 </script>

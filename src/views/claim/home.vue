@@ -14,7 +14,7 @@
           >Add Claim Type</el-button
         >
         <el-dialog
-          title="New Role"
+          title="New Claim"
           :visible.sync="dialogVisible"
           width="70%"
           center

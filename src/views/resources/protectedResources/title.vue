@@ -2,7 +2,7 @@
   <div>
     <div class="top">
       <div class="container">
-        <span>Home </span>
+        <span>Home {{ breakcrum }}</span>
         <h2>Protected Resources</h2>
       </div>
     </div>
@@ -11,11 +11,14 @@
 </template>
 
 <script>
-//import { BreakCrumbModule } from "@/store/modules/breakCrumb";
+import { BreakCrumbModule } from "@/store/modules/breakCrumb";
 
 export default {
- 
-
+  computed: {
+    breakcrum() {
+      return BreakCrumbModule.Router;
+    },
+  },
 };
 </script>
 

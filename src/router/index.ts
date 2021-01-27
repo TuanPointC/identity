@@ -141,7 +141,7 @@ const routes: Array<RouteConfig> = [
     ]
   },
   {
-    path: '/ProtectResources',
+    path: '/ProtectedResources',
     component: TitleProtectResources,
     children: [
       {
@@ -176,12 +176,20 @@ const router = new VueRouter({
 })
 
 router.afterEach((to) => {
+  if (to.fullPath.split('/')[1] == 'ProtectedResources') {
+    BreakCrumbModule.changeBorder('4px solid orangered')
+  }
+  else {
+    BreakCrumbModule.changeBorder('')
+  }
   if (to.fullPath.split('/').length > 2) {
     BreakCrumbModule.changeRouter(to.fullPath.split('/')[2]);
   }
   else {
     BreakCrumbModule.changeRouter('');
   }
+
+
 })
 
 export default router

@@ -9,7 +9,7 @@ export interface IdentityState {
     Position: number;
 }
 
-@Module({ dynamic: true, store, name: 'ide' })
+@Module({ dynamic: true, store, name: 'identity' })
 class IdentityResources extends VuexModule implements IdentityState {
     public GetIdentity: getIdentityResourcesDataType[] = [];
     public Position = -1;
