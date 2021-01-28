@@ -1,5 +1,5 @@
 import axios from 'axios'
-const URL = 'http://192.168.11.245:5000/IdentityResources'
+const URL = 'http://192.168.11.212:5000/IdentityResources'
 import { getIdentityResourcesDataType } from '@/intenties/ResourcesType'
 import { IdentityModule } from '@/store/modules/resources/identity'
 

@@ -1,7 +1,7 @@
 import axios from 'axios'
 import { RolesModule } from '@/store/modules/roles'
 //const URL = 'http://10.20.99.4:5000/Roles'
-const URL ='http://192.168.11.245:5000/Roles'
+const URL ='http://192.168.11.212:5000/Roles'
 import { GetUserRolesResultsType } from '@/intenties/rolesTypeData'
 
 export const getRoles = () => {

@@ -1,5 +1,5 @@
 import axios from 'axios'
-const URL = 'http://192.168.11.245:5000/ProtectedResources'
+const URL = 'http://192.168.11.212:5000/ProtectedResources'
 import { getProtectedResourcesDataType, addProtectedResurcesDataType } from '@/intenties/ResourcesType'
 import { ProtectedModule } from '@/store/modules/resources/protected'
 

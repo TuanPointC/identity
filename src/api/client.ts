@@ -1,7 +1,7 @@
 import axios from 'axios'
 import { ClientDataType } from '@/intenties/clientTypeData'
 import { ClientModule } from '@/store/modules/client'
-const URL = 'http://192.168.11.245:5000/Clients'
+const URL = 'http://192.168.11.212:5000/Clients'
 
 import { addClientDataType } from '@/intenties/clientTypeData'
 
