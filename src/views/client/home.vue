@@ -27,18 +27,10 @@
           :visible.sync="dialogVisible"
           width="70%"
           center
-        >
-          <div
-            class="horizontal"
-            :style="{
-              width: width + '%',
-              background: 'red',
-              height: '3px',
-              margin: '-25px 0px 10px',
-            }"
-          ></div>
+      >
 
-          <typeAddClient />
+          <!-- <typeAddClient /> -->
+          <addClientType2 />
         </el-dialog>
       </div>
 
@@ -86,99 +78,21 @@
 
 <script>
 import { ClientModule } from "@/store/modules/client";
-import { addClientApi } from "@/api/client";
-import { uid } from "uid";
-import { getIdentityResources } from "@/api/identityResources";
-import { getProtectedResources } from "@/api/protectedResorces";
-import typeAddClient from "@/views/client/typeAddClient";
+//import typeAddClient from "@/views/client/typeAddClient";
+import addClientType1 from "@/views/client/addClientType1";
+import addClientType2 from "@/views/client/addClientType2";
 export default {
   components: {
-    typeAddClient,
+    //typeAddClient,
+    addClientType2,
   },
   data() {
     return {
-      button: "Next",
-      width: 16.6667,
-      value: "",
       dialogVisible: false,
       input: "",
-      activeName: "1",
-      addClient: {
-        clientType: "BrowserBased",
-        clientId: "",
-        clientName: "",
-        clientUri: "",
-        logoUri: "",
-        description: "",
-        requireConsent: false,
-        redirectUris: [""],
-        postLogoutRedirectUris: [""],
-        allowedScopes: [],
-        allowedCorsOrigins: ["http://localhost:5000"],
-        clientSecrets: [
-          {
-            type: "",
-            value: "",
-            description: "",
-            expiration: "",
-          },
-        ],
-      },
-      dataIdentity: [],
-      valueIdentity: [],
-      dataProtect: [],
-      valueProtect: [],
     };
   },
   methods: {
-    open2() {
-      this.$message({
-        message: "Congrats, this is a success message.",
-        type: "success",
-      });
-    },
-    next(e) {
-      if (e > 0) {
-        if (parseInt(this.activeName) < 7) {
-          this.activeName = (parseInt(this.activeName) + 1).toString();
-          this.width += 16.666667;
-          if (this.activeName == "6") this.button = "Save";
-          else this.button = "Next";
-        }
-      } else {
-        if (parseInt(this.activeName) > 1) {
-          this.activeName = (parseInt(this.activeName) - 1).toString();
-          this.width -= 16.6667;
-          this.button = "Next";
-        }
-      }
-    },
-    GenerationId() {
-      this.addClient.clientId = uid(25);
-    },
-    async addClientClient() {
-      if (this.activeName == "7") {
-        for (let i = 0; i < this.valueIdentity.length; i++) {
-          this.addClient.allowedScopes.push(
-            this.dataIdentity[this.valueIdentity[i]].label
-          );
-        }
-        for (let i = 0; i < this.valueProtect.length; i++) {
-          if (
-            this.addClient.allowedScopes.indexOf(
-              this.dataProtect[this.valueProtect[i]].label
-            ) == -1
-          ) {
-            this.addClient.allowedScopes.push(
-              this.dataProtect[this.valueProtect[i]].label
-            );
-          }
-        }
-        await addClientApi(this.addClient);
-        await setTimeout(await ClientModule.getClient(""), 1000);
-        this.dialogVisible = false;
-      }
-    },
     async editFunc(e) {
       await ClientModule.changePosition(e.$index);
       this.$router.push("/Clients/details");
@@ -191,20 +105,6 @@ export default {
   },
   async mounted() {
     await ClientModule.getClient("");
-    const data2 = await getProtectedResources("");
-    const data1 = await getIdentityResources("");
-    for (let i = 0; i < data1.length; i++) {
-      this.dataIdentity.push({
-        key: i,
-        label: data1[i].name,
-      });
-    }
-    for (let i = 0; i < data2.length; i++) {
-      this.dataProtect.push({
-        key: i,
-        label: data1[i].name,
-      });
-    }
   },
 };
 </script>

@@ -28,20 +28,6 @@
             ></el-input>
           </div>
           <div class="input">
-            <div class="label">Display URL</div>
-            <el-input
-              placeholder="Please input"
-              v-model="addClient.clientUri"
-            ></el-input>
-          </div>
-          <div class="input">
-            <div class="label">Logo URL <br /></div>
-            <el-input
-              placeholder="Please input"
-              v-model="addClient.logoUri"
-            ></el-input>
-          </div>
-          <div class="input">
             <div class="label">Descriptions</div>
             <el-input
               type="textarea"
@@ -70,33 +56,6 @@
         </div>
       </el-tab-pane>
       <el-tab-pane name="2">
-        <h3>Enter a callback URL</h3>
-        <h5>
-          Tokens will be sent to this endpoint (you can configure more after
-          setup)
-        </h5>
-        <div class="input">
-          <div class="label">Callback URL</div>
-          <el-input
-            placeholder="Please input"
-            v-model="addClient.redirectUris[0]"
-          >
-          </el-input>
-        </div>
-      </el-tab-pane>
-      <el-tab-pane name="3">
-        <h3>Enter a post-logout URL</h3>
-        <h5>Optional (you can configure more after setup)</h5>
-        <div class="input">
-          <div class="label">Logout URL</div>
-          <el-input
-            placeholder="Please input"
-            v-model="addClient.postLogoutRedirectUris[0]"
-          >
-          </el-input>
-        </div>
-      </el-tab-pane>
-      <el-tab-pane name="4">
         <h4>Select identity Resources this client can access</h4>
         <el-transfer
           v-model="valueIdentity"
@@ -106,16 +65,7 @@
         >
         </el-transfer>
       </el-tab-pane>
-      <el-tab-pane name="5">
-        <el-transfer
-          v-model="valueProtect"
-          :data="dataProtect"
-          :titles="['Available', 'Assigned']"
-          style="width: 100%"
-        >
-        </el-transfer>
-      </el-tab-pane>
-      <el-tab-pane name="6">
+      <el-tab-pane name="3">
         <div class="sixthStep">
           <table style="width: 100%">
             <tr>
@@ -221,7 +171,7 @@ export default {
         if (parseInt(this.activeName) < 6) {
           this.activeName = (parseInt(this.activeName) + 1).toString();
           this.width += 16.666667;
-          if (this.activeName == "6") this.button = "Save";
+          if (this.activeName == "5") this.button = "Save";
         }
       } else {
         if (parseInt(this.activeName) > 1) {
