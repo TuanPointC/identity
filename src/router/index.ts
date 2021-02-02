@@ -1,7 +1,7 @@
 import Vue from 'vue'
 import VueRouter, { RouteConfig } from 'vue-router'
 
-import UserHome from '../views/user/home.vue'
+import UserHome from '../views/user/homePage/HomeMain.vue'
 import ClaimsUser from '../views/user/claims.vue'
 import DetailsUser from '../views/user/details.vue'
 import TitleUser from '../views/user/title.vue'

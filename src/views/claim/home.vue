@@ -168,7 +168,7 @@
   </div>
 </template>
 
-<script>
+<script >
 import { ClaimsModule } from "@/store/modules/claim";
 import { addClaimsApi } from "@/api/claim";
 
